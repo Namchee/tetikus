@@ -30,17 +30,19 @@ export default defineComponent({
       default: 36,
     },
 
+    // determines
     invertColor: {
       type: Boolean,
       default: true,
     },
 
+    // control pointer size on mouse up-down events
     clickScale: {
       type: Number,
       default: 1,
     },
 
-    // determine if the custom cursor should show on touch devices
+    // determines if the custom cursor should show on touch devices
     showOnTouch: {
       type: Boolean,
       default: false,
@@ -48,9 +50,12 @@ export default defineComponent({
   },
 
   setup(props, { slots }) {
+    // wrapper element ref
     const wrapper: Ref<HTMLElement | null> = ref(null);
+    // cursor element ref
     const cursor: Ref<HTMLElement | null> = ref(null);
 
+    // mouse position state
     const mousePos = reactive({
       x: 0,
       y: 0,
@@ -72,9 +77,11 @@ export default defineComponent({
       };
     });
 
-    // detect if the primary input is touch
-    const isTouchDevice = () => {
-      return window.matchMedia('(pointer: coarse)').matches;
+    // determine if the component should render on touch-based devices
+    const showPointer = () => {
+      const isTouchDevice = () => window.matchMedia('(pointer: coarse)').matches;
+
+      return !isTouchDevice() || (isTouchDevice() && props.showOnTouch);
     }
 
     // detect if custom shape is preferred instead
@@ -128,35 +135,39 @@ export default defineComponent({
 
     // attach event listeners
     onMounted(() => {
-      window.addEventListener('mouseout', handleMouseOut);
-      window.addEventListener('mouseover', handleMouseOver);
-      window.addEventListener('mousemove', handleMouseMove);
+      if (showPointer()) {
+        window.addEventListener('mouseout', handleMouseOut);
+        window.addEventListener('mouseover', handleMouseOver);
+        window.addEventListener('mousemove', handleMouseMove);
 
-      // add mouse click listener if click size is different
-      if (props.clickScale !== 1) {
-        window.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mouseup', handleMouseUp);
+        // add mouse click listener if click size is different
+        if (props.clickScale !== 1) {
+          window.addEventListener('mousedown', handleMouseDown);
+          window.addEventListener('mouseup', handleMouseUp);
+        }
       }
     });
 
     // clean the attached event listeners
     onBeforeUnmount(() => {
-      window.removeEventListener('mouseout', handleMouseOut);
-      window.removeEventListener('mouseover', handleMouseOver);
-      window.removeEventListener('mousemove', handleMouseMove);
+      if (showPointer()) {
+        window.removeEventListener('mouseout', handleMouseOut);
+        window.removeEventListener('mouseover', handleMouseOver);
+        window.removeEventListener('mousemove', handleMouseMove);
 
-      // remove mouse click listener if click size is different
-      if (props.clickScale !== 1) {
-        window.removeEventListener('mousedown', handleMouseDown);
-        window.removeEventListener('mouseup', handleMouseUp);
+        // remove mouse click listener if click size is different
+        if (props.clickScale !== 1) {
+          window.removeEventListener('mousedown', handleMouseDown);
+          window.removeEventListener('mouseup', handleMouseUp);
+        }
       }
     });
 
     return {
       wrapper,
       cursor,
-      isTouchDevice,
       isCustomShape,
+      showPointer,
       wrapperStyle,
       cursorStyle,
     };
@@ -170,6 +181,7 @@ export default defineComponent({
     class="tetikus"
     ref="wrapper"
     :style='wrapperStyle'
+    v-if="showPointer()"
   >
     <div class="tetikus__cursor" ref="cursor">
       <slot v-if="isCustomShape()"></slot>
