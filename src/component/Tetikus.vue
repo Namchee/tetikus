@@ -1,25 +1,30 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed, reactive, Ref, } from 'vue';
+import { defineComponent, onMounted, ref, computed, reactive, Ref, onBeforeUnmount, } from 'vue';
 
 import { throttle } from './../util/throttle';
 
 export default defineComponent({
   props: {
+    // determine if the default browser-controlled pointer should still be shown
     showDefaultCursor: {
       type: Boolean,
       default: false,
     },
 
+    // determine throttle speed, a.k.a number of events that should be fired
+    // Per 1000 milliseconds, mouse events will be fired (1000 / throttleSpeed) time(s)
     throttleSpeed: {
       type: Number,
       default: 5,
     },
 
+    // background color for default pointer
     color: {
       type: String,
       default: '#f5f5f5',
     },
 
+    // base size for default pointer
     size: {
       type: Number,
       default: 36,
@@ -33,6 +38,12 @@ export default defineComponent({
     clickScale: {
       type: Number,
       default: 1,
+    },
+
+    // determine if the custom cursor should show on touch devices
+    showOnTouch: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -61,59 +72,90 @@ export default defineComponent({
       };
     });
 
+    // detect if the primary input is touch
+    const isTouchDevice = () => {
+      return window.matchMedia('(pointer: coarse)').matches;
+    }
+
+    // detect if custom shape is preferred instead
     const isCustomShape = () => {
       return !!slots.default;
     }
 
+    /**
+     * Begin event listeners part
+     * These functions should only be called on mounted-related hooks
+     */
+
+    // restore default cursor on mouse out
+    const handleMouseOut = () => {
+      const wrapperElem = wrapper.value as HTMLElement;
+      document.body.style.cursor = 'auto';
+
+      wrapperElem.classList.add('tetikus--leave');
+    }
+
+    // hide normal cursor on demand
+    const handleMouseOver = () => {
+      if (!props.showDefaultCursor) {
+        document.body.style.cursor = 'none';
+      }
+
+      const wrapperElem = wrapper.value as HTMLElement;
+
+      wrapperElem.classList.remove('tetikus--leave');
+    };
+
+    // change mouse position on mouse movements
+    const handleMouseMove = throttle((event: MouseEvent) => {
+      mousePos.x = event.clientX - (props.size / 2);
+      mousePos.y = event.clientY - (props.size / 2);
+    }, props.throttleSpeed);
+
+    // scale pointer size on mouse down
+    const handleMouseDown = () => {
+      const cursorElem = cursor.value as HTMLElement;
+
+      cursorElem.style.transform = `scale(${props.clickScale})`;
+    }
+
+    // restore original pointer size on mouse up
+    const handleMouseUp = () => {
+      const cursorElem = cursor.value as HTMLElement;
+
+      cursorElem.style.transform = `scale(1)`;
+    }
+
+    // attach event listeners
     onMounted(() => {
-      const wrapperElem = wrapper.value;
-      const cursorElem = cursor.value;
-
-      if (!wrapperElem || !cursorElem) {
-        throw new Error('Failed to mount \'tetikus\'.');
-      }
-
-      // restore original cursor
-      window.addEventListener('mouseout', () => {
-        document.body.style.cursor = 'auto';
-
-        wrapperElem.classList.add('tetikus--leave');
-      });
-
-      // show custom cursor
-      window.addEventListener('mouseover', () => {
-        if (!props.showDefaultCursor) {
-          document.body.style.cursor = 'none';
-        }
-
-        wrapperElem.classList.remove('tetikus--leave');
-      });
-
-      const handleMouseMove = (event: MouseEvent) => {
-        mousePos.x = event.clientX - (props.size / 2);
-        mousePos.y = event.clientY - (props.size / 2);
-      }
-
-      window.addEventListener(
-        'mousemove',
-        throttle(handleMouseMove, props.throttleSpeed),
-      );
+      window.addEventListener('mouseout', handleMouseOut);
+      window.addEventListener('mouseover', handleMouseOver);
+      window.addEventListener('mousemove', handleMouseMove);
 
       // add mouse click listener if click size is different
       if (props.clickScale !== 1) {
-        window.addEventListener('mousedown', () => {
-          cursorElem.style.transform = `scale(${props.clickScale})`;
-        });
+        window.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mouseup', handleMouseUp);
+      }
+    });
 
-        window.addEventListener('mouseup', () => {
-          cursorElem.style.transform = 'scale(1)';
-        });
+    // clean the attached event listeners
+    onBeforeUnmount(() => {
+      window.removeEventListener('mouseout', handleMouseOut);
+      window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mousemove', handleMouseMove);
+
+      // remove mouse click listener if click size is different
+      if (props.clickScale !== 1) {
+        window.removeEventListener('mousedown', handleMouseDown);
+        window.removeEventListener('mouseup', handleMouseUp);
       }
     });
 
     return {
       wrapper,
       cursor,
+      isTouchDevice,
       isCustomShape,
       wrapperStyle,
       cursorStyle,
@@ -123,7 +165,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <div aria-hidden="true" class="tetikus" ref="wrapper" :style='wrapperStyle'>
+  <div
+    aria-hidden="true"
+    class="tetikus"
+    ref="wrapper"
+    :style='wrapperStyle'
+  >
     <div class="tetikus__cursor" ref="cursor">
       <slot v-if="isCustomShape()"></slot>
 
@@ -147,7 +194,7 @@ export default defineComponent({
   }
 
   & .tetikus__cursor {
-    transition: transform 200ms ease-in-out;
+    transition: transform 150ms ease-in-out;
     transform: scale(1);
   }
 
