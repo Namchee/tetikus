@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "build-lib": "vue-cli-service build --target lib --modern ./src/index.js",
+    "serve": "vue-cli-service serve src/playground/main.ts",
+    "build": "vue-cli-service build --target lib --modern ./src/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -25,6 +24,8 @@
     "eslint-plugin-vue": "^7.0.0-alpha.0",
     "lint-staged": "^9.5.0",
     "precss": "^4.0.0",
+    "tailwindcss": "^1.6.2",
+    "typeface-inter": "^3.12.0",
     "typescript": "~3.9.3",
     "vue-cli-plugin-vue-next": "~0.1.3"
   },

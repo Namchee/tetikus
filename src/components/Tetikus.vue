@@ -49,7 +49,7 @@ export default defineComponent({
     },
   },
 
-  setup(props, { slots }) {
+  setup(props, { slots, emit }) {
     // wrapper element ref
     const wrapper: Ref<HTMLElement | null> = ref(null);
     // cursor element ref
@@ -100,6 +100,8 @@ export default defineComponent({
       document.body.style.cursor = 'auto';
 
       wrapperElem.classList.add('tetikus--leave');
+
+      emit('tetikus-window-leave');
     }
 
     // hide normal cursor on demand
@@ -111,26 +113,34 @@ export default defineComponent({
       const wrapperElem = wrapper.value as HTMLElement;
 
       wrapperElem.classList.remove('tetikus--leave');
+
+      emit('tetikus-window-enter');
     };
 
     // change mouse position on mouse movements
     const handleMouseMove = throttle((event: MouseEvent) => {
       mousePos.x = event.clientX - (props.size / 2);
       mousePos.y = event.clientY - (props.size / 2);
+
+      emit('tetikus-mouse-move', event);
     }, props.throttleSpeed);
 
     // scale pointer size on mouse down
-    const handleMouseDown = () => {
+    const handleMouseDown = (event: MouseEvent) => {
       const cursorElem = cursor.value as HTMLElement;
 
       cursorElem.style.transform = `scale(${props.clickScale})`;
+
+      emit('tetikus-mouse-down', event);
     }
 
     // restore original pointer size on mouse up
-    const handleMouseUp = () => {
+    const handleMouseUp = (event: MouseEvent) => {
       const cursorElem = cursor.value as HTMLElement;
 
       cursorElem.style.transform = `scale(1)`;
+
+      emit('tetikus-mouse-up', event);
     }
 
     // attach event listeners
