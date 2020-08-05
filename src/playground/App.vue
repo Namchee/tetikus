@@ -34,7 +34,11 @@ export default {
       </div>
     </section>
 
-    <tetikus :size="64" :clickScale=".8" :throttleSpeed="1" />
+    <tetikus
+      :size="64"
+      :clickScale=".8"
+      :throttleSpeed="5"
+    />
   </main>
 </template>
 

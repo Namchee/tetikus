@@ -1,5 +1,13 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed, reactive, Ref, onBeforeUnmount, } from 'vue';
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  computed,
+  reactive,
+  Ref,
+  onBeforeUnmount,
+} from 'vue';
 
 import { throttle } from './../util/throttle';
 
@@ -160,6 +168,7 @@ export default defineComponent({
 
     // clean the attached event listeners
     onBeforeUnmount(() => {
+      console.log('fire');
       if (showPointer()) {
         window.removeEventListener('mouseout', handleMouseOut);
         window.removeEventListener('mouseover', handleMouseOver);
