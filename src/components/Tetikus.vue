@@ -55,6 +55,14 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+
+    opacity: {
+      type: Number,
+      default: 1,
+      validator: (value: number) => {
+        return value >= 0 && value <= 1;
+      }
+    }
   },
 
   setup(props, { slots, emit }) {
@@ -73,6 +81,7 @@ export default defineComponent({
       return {
         'top': `${mousePos.y}px`,
         'left': `${mousePos.x}px`,
+        'opacity': props.opacity,
         'mix-blend-mode': props.invertColor ? 'difference' : 'normal',
       };
     });
@@ -168,7 +177,6 @@ export default defineComponent({
 
     // clean the attached event listeners
     onBeforeUnmount(() => {
-      console.log('fire');
       if (showPointer()) {
         window.removeEventListener('mouseout', handleMouseOut);
         window.removeEventListener('mouseover', handleMouseOver);

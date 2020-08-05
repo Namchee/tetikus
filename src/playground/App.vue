@@ -35,9 +35,11 @@ export default {
     </section>
 
     <tetikus
-      :size="64"
+      :showDefaultCursor="true"
+      :size="48"
       :clickScale=".8"
-      :throttleSpeed="5"
+      :opacity=".8"
+      :invertColor="false"
     />
   </main>
 </template>
