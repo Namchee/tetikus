@@ -23,7 +23,7 @@ export default defineComponent({
     // Per 1000 milliseconds, mouse events will be fired (1000 / throttleSpeed) time(s)
     throttleSpeed: {
       type: Number,
-      default: 5,
+      default: 1,
     },
 
     // background color for default pointer
@@ -56,12 +56,19 @@ export default defineComponent({
       default: false,
     },
 
+    // cursor opacity
     opacity: {
       type: Number,
       default: 1,
       validator: (value: number) => {
         return value >= 0 && value <= 1;
       }
+    },
+
+    // determines if the cursor should be hidden when the cursor position is outside the window
+    hideOnOut: {
+      type: Boolean,
+      default: true,
     }
   },
 
@@ -116,7 +123,9 @@ export default defineComponent({
       const wrapperElem = wrapper.value as HTMLElement;
       document.body.style.cursor = 'auto';
 
-      wrapperElem.classList.add('tetikus--leave');
+      if (props.hideOnOut) {
+        wrapperElem.classList.add('tetikus--leave');
+      }
 
       emit('tetikus-window-leave');
     }
@@ -210,8 +219,10 @@ export default defineComponent({
     :style='wrapperStyle'
     v-if="showPointer()"
   >
+    <!-- start: cursor shape part -->
     <div class="tetikus__cursor" ref="cursor">
-      <slot v-if="isCustomShape()"></slot>
+      <slot v-if="isCustomShape()">
+      </slot>
 
       <div
         class="tetikus__default__cursor"
@@ -219,6 +230,14 @@ export default defineComponent({
         :style="cursorStyle">
       </div>
     </div>
+    <!-- end: cursor shape part -->
+
+    <!-- start: cursor contents -->
+    <div class="tetikus__contents">
+      <slot name="contents"></slot>
+    </div>
+    <!-- end: cursor contents -->
+
   </div>
 </template>
 
@@ -227,6 +246,8 @@ export default defineComponent({
   pointer-events: none;
   position: fixed;
   z-index: 999;
+  display: grid;
+  place-items: center;
 
   &.tetikus--leave {
     display: none;
@@ -235,6 +256,10 @@ export default defineComponent({
   & .tetikus__cursor {
     transition: transform 150ms ease-in-out;
     transform: scale(1);
+  }
+
+  & .tetikus__contents {
+    position: absolute;
   }
 
   & .tetikus__default__cursor {
