@@ -26,10 +26,23 @@ export default defineComponent({
       default: 1,
     },
 
+    // determine stroke width for default cursor shape
+    strokeWidth: {
+      type: Number,
+      default: 0,
+    },
+
     // background color for default pointer
     color: {
       type: String,
       default: '#f5f5f5',
+    },
+
+    // determine stroke color for default cursor shape
+    // won't have any effect if stroke width is 0
+    strokeColor: {
+      type: String,
+      default: '#121212',
     },
 
     // base size for default pointer
@@ -69,7 +82,7 @@ export default defineComponent({
     hideOnOut: {
       type: Boolean,
       default: true,
-    }
+    },
   },
 
   setup(props, { slots, emit }) {
@@ -96,6 +109,9 @@ export default defineComponent({
     const cursorStyle = computed(() => {
       return {
         'background-color': props.color,
+        'border-width': `${props.strokeWidth}px`,
+        'border-style': 'solid',
+        'border-color': props.strokeColor,
         'width': `${props.size}px`,
         'height': `${props.size}px`,
       };
@@ -254,6 +270,7 @@ export default defineComponent({
   }
 
   & .tetikus__cursor {
+    box-sizing: border-box;
     transition: transform 150ms ease-in-out;
     transform: scale(1);
   }

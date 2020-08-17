@@ -36,15 +36,16 @@ export default {
 
     <tetikus
       :showDefaultCursor="true"
-      :color="'#121212'"
+      :color="'transparent'"
+      :strokeWidth="1.5"
+      :strokeColor="'#121212'"
       :size="64"
-      :clickScale=".8"
-      :opacity=".9"
+      :clickScale=".85"
       :invertColor="false"
       :hideOnOut="false"
     >
       <template v-slot:contents>
-        <div class="text-gray-200 text-xs uppercase font-medium tracking-wide">
+        <div class="text-xs uppercase font-semibold tracking-wide">
           View
         </div>
       </template>
