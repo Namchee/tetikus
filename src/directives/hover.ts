@@ -1,21 +1,36 @@
-import { DirectiveArguments, DirectiveBinding } from 'vue';
+import { DirectiveBinding, ref, Ref, VNode } from 'vue';
+import { TransformProperties, HoverState } from '@/types';
 
-const handleElementHover = (e: MouseEvent, props?: string) => {
+export const hoverState: Ref<HoverState | null> = ref(null);
 
+const handleElementHover = (props: TransformProperties, vnode: VNode) => {
+  const state: HoverState = {
+    transformProps: props,
+  };
+
+  hoverState.value = state;
 }
 
 export const TetikusHover = {
-  mounted(el: HTMLElement, binding: DirectiveBinding) {
+  mounted(
+    el: HTMLElement,
+    binding: DirectiveBinding<TransformProperties>,
+    vnode: VNode,
+  ) {
     el.addEventListener(
       'mouseenter',
-      (e: MouseEvent) => handleElementHover(e, binding.arg),
+      () => handleElementHover(binding.value, vnode),
     );
   },
 
-  beforeUnmount(el: HTMLElement, binding: DirectiveBinding) {
+  beforeUnmount(
+    el: HTMLElement,
+    binding: DirectiveBinding<TransformProperties>,
+    vnode: VNode,
+  ) {
     el.removeEventListener(
       'mouseenter',
-      (e: MouseEvent) => handleElementHover(e, binding.arg),
+      () => handleElementHover(binding.value, vnode),
     );
   },
 };

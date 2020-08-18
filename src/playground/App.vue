@@ -35,13 +35,11 @@ export default {
     </section>
 
     <tetikus
-      :showDefaultCursor="true"
       :color="'transparent'"
       :strokeWidth="1.5"
       :strokeColor="'#121212'"
-      :size="64"
-      :clickScale=".85"
-      :invertColor="false"
+      :size="16"
+      :contentPosition="'right'"
       :hideOnOut="false"
     >
       <template v-slot:contents>

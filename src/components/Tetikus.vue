@@ -51,10 +51,10 @@ export default defineComponent({
       default: 36,
     },
 
-    // determines
+    // determines mix blend mode value on custom cursor
     invertColor: {
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     // control pointer size on mouse up-down events
@@ -81,8 +81,14 @@ export default defineComponent({
     // determines if the cursor should be hidden when the cursor position is outside the window
     hideOnOut: {
       type: Boolean,
-      default: true,
+      default: false,
     },
+
+    contentPosition: {
+      type: String,
+      validator: (val: string) => ['center', 'bottom', 'right'].includes(val),
+      default: 'center',
+    }
   },
 
   setup(props, { slots, emit }) {
@@ -103,6 +109,12 @@ export default defineComponent({
         'left': `${mousePos.x}px`,
         'opacity': props.opacity,
         'mix-blend-mode': props.invertColor ? 'difference' : 'normal',
+        'flex-direction': props.contentPosition === 'bottom' ?
+          'column' : 'row',
+        'justify-content': props.contentPosition !== 'right' ?
+          'center' : 'justify-evenly',
+        'align-items': props.contentPosition !== 'bottom' ?
+          'center' : 'justify-evenly',
       };
     });
 
@@ -114,6 +126,13 @@ export default defineComponent({
         'border-color': props.strokeColor,
         'width': `${props.size}px`,
         'height': `${props.size}px`,
+      };
+    });
+
+    const contentStyle = computed(() => {
+      return {
+        'position': props.contentPosition === 'center' ?
+          'absolute' : 'center',
       };
     });
 
@@ -222,6 +241,7 @@ export default defineComponent({
       showPointer,
       wrapperStyle,
       cursorStyle,
+      contentStyle,
     };
   },
 });
@@ -249,7 +269,10 @@ export default defineComponent({
     <!-- end: cursor shape part -->
 
     <!-- start: cursor contents -->
-    <div class="tetikus__contents">
+    <div
+      class="tetikus__contents"
+      :style="contentStyle"
+    >
       <slot name="contents"></slot>
     </div>
     <!-- end: cursor contents -->
@@ -262,8 +285,7 @@ export default defineComponent({
   pointer-events: none;
   position: fixed;
   z-index: 999;
-  display: grid;
-  place-items: center;
+  display: flex;
 
   &.tetikus--leave {
     display: none;
@@ -273,10 +295,6 @@ export default defineComponent({
     box-sizing: border-box;
     transition: transform 150ms ease-in-out;
     transform: scale(1);
-  }
-
-  & .tetikus__contents {
-    position: absolute;
   }
 
   & .tetikus__default__cursor {
