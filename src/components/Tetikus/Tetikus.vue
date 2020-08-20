@@ -7,9 +7,11 @@ import {
   reactive,
   Ref,
   onBeforeUnmount,
+  watch,
 } from 'vue';
 
-import { throttle } from './../util/throttle';
+import { throttle } from '@/util/throttle';
+import { hoverState } from '@/directives/hover';
 
 export default defineComponent({
   props: {
@@ -231,6 +233,15 @@ export default defineComponent({
           window.removeEventListener('mousedown', handleMouseDown);
           window.removeEventListener('mouseup', handleMouseUp);
         }
+      }
+    });
+
+    // watch any hover state changes and emit event
+    watch(hoverState, (state) => {
+      if (state) {
+        emit('tetikus-element-hover', state);
+      } else {
+        emit('tetikus-element-out');
       }
     });
 

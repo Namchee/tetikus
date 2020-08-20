@@ -1,10 +1,15 @@
 <script lang="ts">
-import Tetikus from './../components/Tetikus.vue';
+import Tetikus from '@/components/Tetikus';
+import { TetikusHover } from '@/directives/hover';
 
 export default {
   components: {
     Tetikus,
-  }
+  },
+
+  directives: {
+    thover: TetikusHover,
+  },
 }
 </script>
 
@@ -14,7 +19,7 @@ export default {
       Tetikus Playground
     </h1>
     <section class="px-8">
-      <h2 class="text-2xl mb-4">
+      <h2 class="text-2xl mb-4" v-thover="{ color: 'red' }">
         Colored Background Test
       </h2>
       <div class="bg-yellow-400 inline-block p-8 rounded mr-4">
@@ -36,11 +41,12 @@ export default {
 
     <tetikus
       :color="'transparent'"
-      :strokeWidth="1.5"
+      :strokeWidth="1.25"
       :strokeColor="'#121212'"
       :size="16"
       :contentPosition="'right'"
       :hideOnOut="false"
+      @tetikus-element-hover='hoverElem'
     >
       <template v-slot:contents>
         <div class="text-xs uppercase font-semibold tracking-wide">
