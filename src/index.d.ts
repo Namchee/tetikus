@@ -1,3 +1,5 @@
+
+
 declare interface TransformProperties {
   size?: number;
   color?: string;
@@ -10,4 +12,5 @@ declare interface TransformProperties {
 declare interface HoverBehavior {
   domElement: HTMLElement;
   transformProps: TransformProperties;
+  custom?: boolean;
 }

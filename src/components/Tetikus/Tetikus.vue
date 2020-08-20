@@ -11,6 +11,7 @@ import {
 } from 'vue';
 
 import { throttle } from '@/util/throttle';
+import { lerp } from '@/util/math';
 import { hoverState } from '@/directives/hover';
 
 export default defineComponent({
@@ -86,11 +87,18 @@ export default defineComponent({
       default: false,
     },
 
+    // determines content position
     contentPosition: {
       type: String,
       validator: (val: string) => ['center', 'bottom', 'right'].includes(val),
       default: 'center',
-    }
+    },
+
+    // determines linear interpolation value (a.k.a movement animation)
+    lerp: {
+      type: Number,
+      default: 1,
+    },
   },
 
   setup(props, { slots, emit }) {
@@ -106,9 +114,7 @@ export default defineComponent({
     });
 
     const wrapperStyle = computed(() => {
-      return {
-        'top': `${mousePos.y}px`,
-        'left': `${mousePos.x}px`,
+      const baseStyles: Record<string, unknown> = {
         'opacity': props.opacity,
         'mix-blend-mode': props.invertColor ? 'difference' : 'normal',
         'flex-direction': props.contentPosition === 'bottom' ?
@@ -118,6 +124,13 @@ export default defineComponent({
         'align-items': props.contentPosition !== 'bottom' ?
           'center' : 'justify-evenly',
       };
+
+      if (props.lerp === 1) {
+        baseStyles['top'] = `${mousePos.y}px`;
+        baseStyles['left'] = `${mousePos.x}px`;
+      }
+
+      return baseStyles;
     });
 
     const cursorStyle = computed(() => {
@@ -206,6 +219,20 @@ export default defineComponent({
       emit('tetikus-mouse-up', event);
     }
 
+    const handleLerp = () => {
+      const cursorEl = wrapper.value as HTMLElement;
+
+      const x = lerp(cursorEl.style.left, mousePos.x, props.lerp);
+      const y = lerp(cursorEl.style.top, mousePos.y, props.lerp);
+
+      console.log(`${x}px, ${y}px`);
+
+      cursorEl.style.left = `${x}px`;
+      cursorEl.style.top = `${y}px`;
+
+      requestAnimationFrame(handleLerp);
+    }
+
     // attach event listeners
     onMounted(() => {
       if (showPointer()) {
@@ -217,6 +244,11 @@ export default defineComponent({
         if (props.clickScale !== 1) {
           window.addEventListener('mousedown', handleMouseDown);
           window.addEventListener('mouseup', handleMouseUp);
+        }
+
+        if (props.lerp !== 1) {
+          // linear interpolator
+          requestAnimationFrame(handleLerp);
         }
       }
     });

@@ -41,18 +41,14 @@ export default {
 
     <tetikus
       :color="'transparent'"
-      :strokeWidth="1.25"
+      :strokeWidth="1.5"
       :strokeColor="'#121212'"
-      :size="16"
+      :size="64"
       :contentPosition="'right'"
       :hideOnOut="false"
-      @tetikus-element-hover='hoverElem'
+      :clickScale="0.9"
+      :lerp=".25"
     >
-      <template v-slot:contents>
-        <div class="text-xs uppercase font-semibold tracking-wide">
-          View
-        </div>
-      </template>
     </tetikus>
   </main>
 </template>
