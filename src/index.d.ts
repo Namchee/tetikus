@@ -1,5 +1,3 @@
-
-
 declare interface TransformProperties {
   size?: number;
   color?: string;

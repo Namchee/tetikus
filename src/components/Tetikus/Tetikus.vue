@@ -219,13 +219,12 @@ export default defineComponent({
       emit('tetikus-mouse-up', event);
     }
 
+    // handle linear interpolation if option is enabled
     const handleLerp = () => {
       const cursorEl = wrapper.value as HTMLElement;
 
       const x = lerp(cursorEl.style.left, mousePos.x, props.lerp);
       const y = lerp(cursorEl.style.top, mousePos.y, props.lerp);
-
-      console.log(`${x}px, ${y}px`);
 
       cursorEl.style.left = `${x}px`;
       cursorEl.style.top = `${y}px`;
