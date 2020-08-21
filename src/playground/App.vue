@@ -47,9 +47,8 @@ export default {
       :contentPosition="'right'"
       :hideOnOut="false"
       :clickScale="0.9"
-      :lerp=".25"
-    >
-    </tetikus>
+      :lerp=".2"
+    />
   </main>
 </template>
 

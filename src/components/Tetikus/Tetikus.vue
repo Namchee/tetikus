@@ -14,6 +14,13 @@ import { throttle } from '@/util/throttle';
 import { lerp } from '@/util/math';
 import { hoverState } from '@/directives/hover';
 
+// button mapping utility
+const buttonMap: Map<number, string> = new Map([
+  [1, 'left'],
+  [2, 'middle'],
+  [3, 'right'],
+]);
+
 export default defineComponent({
   props: {
     // determine if the default browser-controlled pointer should still be shown
@@ -58,6 +65,15 @@ export default defineComponent({
     invertColor: {
       type: Boolean,
       default: false,
+    },
+
+    // determines which mouse button press will trigger mousedown events
+    buttonMap: {
+      type: Array,
+      default: () => ['left'],
+      validator: (val: Array<string>) => {
+        return val.every(v => ['left', 'middle', 'right'].includes(v));
+      }
     },
 
     // control pointer size on mouse up-down events
@@ -203,18 +219,32 @@ export default defineComponent({
 
     // scale pointer size on mouse down
     const handleMouseDown = (event: MouseEvent) => {
-      const cursorElem = cursor.value as HTMLElement;
+      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
+        console.log(event.which);
+        return;
+      }
 
-      cursorElem.style.transform = `scale(${props.clickScale})`;
+      if (!isCustomShape()) {
+        const cursorElem = cursor.value as HTMLElement;
+
+        cursorElem.style.transform = `scale(${props.clickScale})`;
+      }
+
 
       emit('tetikus-mouse-down', event);
     }
 
     // restore original pointer size on mouse up
     const handleMouseUp = (event: MouseEvent) => {
-      const cursorElem = cursor.value as HTMLElement;
+      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
+        return;
+      }
 
-      cursorElem.style.transform = `scale(1)`;
+      if (!isCustomShape()) {
+        const cursorElem = cursor.value as HTMLElement;
+
+        cursorElem.style.transform = `scale(1)`;
+      }
 
       emit('tetikus-mouse-up', event);
     }
@@ -298,13 +328,14 @@ export default defineComponent({
     v-if="showPointer()"
   >
     <!-- start: cursor shape part -->
-    <div class="tetikus__cursor" ref="cursor">
+    <div class="tetikus__cursor">
       <slot v-if="isCustomShape()">
       </slot>
 
       <div
         class="tetikus__default__cursor"
         v-else
+        ref="cursor"
         :style="cursorStyle">
       </div>
     </div>
@@ -335,12 +366,12 @@ export default defineComponent({
 
   & .tetikus__cursor {
     box-sizing: border-box;
-    transition: transform 150ms ease-in-out;
-    transform: scale(1);
   }
 
   & .tetikus__default__cursor {
     border-radius: 9999px;
+    transition: transform 150ms ease-in-out;
+    transform: scale(1);
   }
 }
 </style>
