@@ -13,7 +13,6 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "src/index.d.ts"
     ],
     "paths": {
       "@/*": [
