@@ -11,7 +11,7 @@
     "core-js": "^3.6.5",
     "vue": "^3.0.0-beta.1"
   },
-  "types": "src/index.d.ts",
+  "types": "src/types.d.ts",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",

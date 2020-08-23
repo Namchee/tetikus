@@ -8,6 +8,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
@@ -31,7 +32,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx", "src/util/throttle.js",
+    "tests/**/*.tsx", "src/util/throttle.ts", "src/util/dom.ts",
   ],
   "exclude": [
     "node_modules"

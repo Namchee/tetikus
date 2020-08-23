@@ -43,10 +43,9 @@ export default {
       :color="'transparent'"
       :strokeWidth="1.5"
       :strokeColor="'#121212'"
-      :size="64"
-      :contentPosition="'right'"
+      :size="36"
       :hideOnOut="false"
-      :clickScale="0.9"
+      :clickBehavior="{ size: { value: 32 }, strokeWidth: { value: 5, duration: 250 }}"
       :lerp=".2"
     />
   </main>

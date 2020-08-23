@@ -12,7 +12,9 @@ import {
 
 import { throttle } from '@/util/throttle';
 import { lerp } from '@/util/math';
+import { generateCSSStyles, generateCSSTransform } from '@/util/dom';
 import { hoverState } from '@/directives/hover';
+import { TransformProps } from '@/types';
 
 // button mapping utility
 const buttonMap: Map<number, string> = new Map([
@@ -45,7 +47,7 @@ export default defineComponent({
     // background color for default pointer
     color: {
       type: String,
-      default: '#f5f5f5',
+      default: '#121212',
     },
 
     // determine stroke color for default cursor shape
@@ -77,9 +79,9 @@ export default defineComponent({
     },
 
     // control pointer size on mouse up-down events
-    clickScale: {
-      type: Number,
-      default: 1,
+    clickBehavior: {
+      type: Object as () => TransformProps,
+      default: {},
     },
 
     // determines if the custom cursor should show on touch devices
@@ -129,6 +131,7 @@ export default defineComponent({
       y: 0,
     });
 
+    // css styles for cursor wrapper element
     const wrapperStyle = computed(() => {
       const baseStyles: Record<string, unknown> = {
         'opacity': props.opacity,
@@ -149,9 +152,10 @@ export default defineComponent({
       return baseStyles;
     });
 
+    // css styles for default circle cursor
     const cursorStyle = computed(() => {
       return {
-        'background-color': props.color,
+        'background': props.color,
         'border-width': `${props.strokeWidth}px`,
         'border-style': 'solid',
         'border-color': props.strokeColor,
@@ -160,6 +164,7 @@ export default defineComponent({
       };
     });
 
+    // css styles for cursor content
     const contentStyle = computed(() => {
       return {
         'position': props.contentPosition === 'center' ?
@@ -220,16 +225,21 @@ export default defineComponent({
     // scale pointer size on mouse down
     const handleMouseDown = (event: MouseEvent) => {
       if (!props.buttonMap.includes(buttonMap.get(event.which))) {
-        console.log(event.which);
         return;
       }
 
       if (!isCustomShape()) {
         const cursorElem = cursor.value as HTMLElement;
+        const css = generateCSSTransform(props as Record<string, any>, props.clickBehavior);
 
-        cursorElem.style.transform = `scale(${props.clickScale})`;
+        for (const key of Object.keys(css.cssStyles)) {
+          cursorElem.style[key] = css.cssStyles[key];
+        }
+
+        console.log(css.transitionString);
+
+        cursorElem.style.transition = css.transitionString;
       }
-
 
       emit('tetikus-mouse-down', event);
     }
@@ -243,7 +253,11 @@ export default defineComponent({
       if (!isCustomShape()) {
         const cursorElem = cursor.value as HTMLElement;
 
-        cursorElem.style.transform = `scale(1)`;
+        const cssStyles = generateCSSStyles(props as Record<string, any>);
+
+        for (const key of Object.keys(cssStyles)) {
+          cursorElem.style[key] = cssStyles[key];
+        }
       }
 
       emit('tetikus-mouse-up', event);
@@ -251,13 +265,15 @@ export default defineComponent({
 
     // handle linear interpolation if option is enabled
     const handleLerp = () => {
-      const cursorEl = wrapper.value as HTMLElement;
+      const cursorElem = wrapper.value as HTMLElement;
 
-      const x = lerp(cursorEl.style.left, mousePos.x, props.lerp);
-      const y = lerp(cursorEl.style.top, mousePos.y, props.lerp);
+      if (cursorElem) {
+        const x = lerp(cursorElem.style.left, mousePos.x, props.lerp);
+        const y = lerp(cursorElem.style.top, mousePos.y, props.lerp);
 
-      cursorEl.style.left = `${x}px`;
-      cursorEl.style.top = `${y}px`;
+        cursorElem.style.left = `${x}px`;
+        cursorElem.style.top = `${y}px`;
+      }
 
       requestAnimationFrame(handleLerp);
     }
@@ -269,8 +285,8 @@ export default defineComponent({
         window.addEventListener('mouseover', handleMouseOver);
         window.addEventListener('mousemove', handleMouseMove);
 
-        // add mouse click listener if click size is different
-        if (props.clickScale !== 1) {
+        // add mouse click listener if click behavior is defined
+        if (Object.keys(props.clickBehavior).length > 0) {
           window.addEventListener('mousedown', handleMouseDown);
           window.addEventListener('mouseup', handleMouseUp);
         }
@@ -289,8 +305,8 @@ export default defineComponent({
         window.removeEventListener('mouseover', handleMouseOver);
         window.removeEventListener('mousemove', handleMouseMove);
 
-        // remove mouse click listener if click size is different
-        if (props.clickScale !== 1) {
+        // remove mouse click listener if click behavior is defined
+        if (Object.keys(props.clickBehavior).length > 0) {
           window.removeEventListener('mousedown', handleMouseDown);
           window.removeEventListener('mouseup', handleMouseUp);
         }

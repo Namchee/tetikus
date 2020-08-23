@@ -1,8 +1,9 @@
 import { DirectiveBinding, ref, Ref, VNode } from 'vue';
+import { HoverBehavior, TransformProps } from '../types';
 
 export const hoverState: Ref<HoverBehavior | null> = ref(null);
 
-const updateHoverState = (props: TransformProperties, vnode: VNode) => {
+const updateHoverState = (props: TransformProps, vnode: VNode) => {
   const state: HoverBehavior = {
     transformProps: props,
     domElement: vnode.el as HTMLElement,
@@ -18,7 +19,7 @@ const clearHoverState = () => {
 export const TetikusHover = {
   mounted(
     el: HTMLElement,
-    binding: DirectiveBinding<TransformProperties>,
+    binding: DirectiveBinding<TransformProps>,
     vnode: VNode,
   ) {
     el.addEventListener(
@@ -31,7 +32,7 @@ export const TetikusHover = {
 
   beforeUnmount(
     el: HTMLElement,
-    binding: DirectiveBinding<TransformProperties>,
+    binding: DirectiveBinding<TransformProps>,
     vnode: VNode,
   ) {
     el.removeEventListener(
