@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve src/playground/main.ts",
     "build": "vue-cli-service build --target lib --modern ./src/index.js",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "postuninstall": "npm prune"
   },
   "dependencies": {
     "core-js": "^3.6.5",

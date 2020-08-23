@@ -5,6 +5,7 @@ interface ConverterFunction {
 }
 
 interface CSSMap {
+  unit: string;
   cssProp?: string;
   calc?: ConverterFunction;
 }
@@ -16,28 +17,31 @@ const keyMap: Map<string, CSSMap> = new Map([
       cssProp: 'transform',
       calc: (orig: Record<string, number | string>, target: TransformProps) => {
         return `scale(${Number(target.size?.value || orig.size) / Number(orig.size)})`;
-      }
+      },
+      unit: 'px',
     }
   ],
   [
-    'background',
-    { },
+    'color',
+    { cssProp: 'background', unit: '' },
   ],
   [
     'strokeWidth',
     {
       cssProp: 'border-width',
+      unit: 'px',
     },
   ],
   [
     'strokeColor',
     {
       cssProp: 'border-color',
+      unit: '',
     },
   ],
   [
     'opacity',
-    { },
+    { unit: '' },
   ],
 ]);
 
@@ -80,7 +84,7 @@ export function generateCSSStyles(props: Record<string, string | number>): CSSSt
 
     cssStyles[cssMap.cssProp || key] = cssMap.calc ?
       cssMap.calc(props, props) :
-      `${props[key]}px`;
+      `${props[key]}${cssMap.unit}`;
   }
 
   return cssStyles;
@@ -110,7 +114,7 @@ export function generateCSSTransform(
 
     cssStyles[cssMap.cssProp || key] = cssMap.calc ?
       cssMap.calc(orig, target) :
-      `${target[key].value}px`;
+      `${target[key].value}${cssMap.unit}`;
 
     transitions.push(
       generateTransitionString(cssMap.cssProp || key, key, target),
