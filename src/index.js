@@ -1,8 +1,21 @@
-import Tetikus from './component/Tetikus.vue';
+import Tetikus from '@/component/Tetikus';
+import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
 
 export default {
-  install(app) {
+  install(app, { transitionSpeed, easing, delay }) {
     app.component('Tetikus', Tetikus);
+
+    if (transitionSpeed) {
+      defaultTransitionSpeed.value = transitionSpeed;
+    }
+
+    if (easing) {
+      defaultEasingFunction.value = easing;
+    }
+
+    if (delay) {
+      defaultDelay.value = delay;
+    }
   }
 }
 

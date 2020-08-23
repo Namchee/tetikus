@@ -45,7 +45,7 @@ export default {
       :strokeColor="'#121212'"
       :size="64"
       :hideOnOut="false"
-      :clickBehavior="{ color: { value: 'red', duration: 250 }}"
+      :clickBehavior="{ color: 'rgba(255, 0, 0, .25)' }"
       :lerp=".2"
     />
   </main>

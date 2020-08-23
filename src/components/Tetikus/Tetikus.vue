@@ -15,6 +15,7 @@ import { lerp } from '@/util/math';
 import { generateCSSStyles, generateCSSTransform } from '@/util/dom';
 import { hoverState } from '@/directives/hover';
 import { TransformProps } from '@/types';
+import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from './options';
 
 // button mapping utility
 const buttonMap: Map<number, string> = new Map([
@@ -112,10 +113,29 @@ export default defineComponent({
       default: 'center',
     },
 
-    // determines linear interpolation value (a.k.a movement animation)
+    // determines linear interpolation value (a.k.a slo-mo movement animation)
     lerp: {
       type: Number,
       default: 1,
+    },
+
+    // determine default transition speed when property is not supplied on behavior
+    defaultTransitionSpeed: {
+      type: Number,
+      default: defaultTransitionSpeed.value,
+    },
+
+    // determine default easing function when property is not supplied on behavior
+    // must be CSS-compatible easing function
+    defaultEasing: {
+      type: String,
+      default: defaultEasingFunction.value,
+    },
+
+    // determine default delay duration when property is not supplied on behavior
+    defaultDelay: {
+      type: Number,
+      default: defaultDelay.value,
     },
   },
 

@@ -6,11 +6,11 @@ export interface TransformOpts<T> {
 }
 
 export interface TransformProps {
-  size?: TransformOpts<number>;
-  color?: TransformOpts<string>;
-  strokeWidth?: TransformOpts<number>;
-  strokeColor?: TransformOpts<string>;
-  opacity?: TransformOpts<number>;
+  size?: TransformOpts<number> | number;
+  color?: TransformOpts<string> | string;
+  strokeWidth?: TransformOpts<number> | number;
+  strokeColor?: TransformOpts<string> | string;
+  opacity?: TransformOpts<number> | number;
 }
 
 export interface CSSStyles {

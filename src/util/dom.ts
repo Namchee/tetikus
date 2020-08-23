@@ -1,4 +1,5 @@
-import { TransformProps, TransformOpts, CSSAnimation, CSSStyles } from '@/types';
+import { TransformProps, TransformOpts, CSSStyles, CSSAnimation } from '@/types';
+import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
 
 interface ConverterFunction {
   (orig: Record<string, number | string>, target: TransformProps): string;
@@ -6,7 +7,7 @@ interface ConverterFunction {
 
 interface CSSMap {
   unit: string;
-  cssProp?: string;
+  cssProp: string;
   calc?: ConverterFunction;
 }
 
@@ -16,7 +17,11 @@ const keyMap: Map<string, CSSMap> = new Map([
     {
       cssProp: 'transform',
       calc: (orig: Record<string, number | string>, target: TransformProps) => {
-        return `scale(${Number(target.size?.value || orig.size) / Number(orig.size)})`;
+        const sourceValue = target.size ?
+          (typeof target.size === 'number' ? target.size : target.size.value) :
+          orig.size;
+
+        return `scale(${sourceValue} / ${orig.size})`;
       },
       unit: 'px',
     }
@@ -41,7 +46,10 @@ const keyMap: Map<string, CSSMap> = new Map([
   ],
   [
     'opacity',
-    { unit: '' },
+    {
+      cssProp: 'opacity',
+      unit: '',
+    },
   ],
 ]);
 
@@ -58,9 +66,9 @@ function generateTransitionString(
   key: string,
   opts: Record<string, TransformOpts<string | number> >,
 ): string {
-  const duration = `${opts[key].duration || 200}ms`;
-  const easingFunc = opts[key].easing || 'ease-out';
-  const delay = `${opts[key].delay !== undefined ? opts[key].delay : 0}ms`;
+  const duration = `${opts[key].duration || defaultTransitionSpeed.value}ms`;
+  const easingFunc = opts[key].easing || defaultEasingFunction.value;
+  const delay = `${opts[key].delay !== undefined ? opts[key].delay : defaultDelay.value}ms`;
 
   return `${prop} ${duration} ${easingFunc} ${delay}`;
 }
@@ -82,7 +90,7 @@ export function generateCSSStyles(props: Record<string, string | number>): CSSSt
       continue;
     }
 
-    cssStyles[cssMap.cssProp || key] = cssMap.calc ?
+    cssStyles[cssMap.cssProp] = cssMap.calc ?
       cssMap.calc(props, props) :
       `${props[key]}${cssMap.unit}`;
   }
@@ -112,12 +120,14 @@ export function generateCSSTransform(
       continue;
     }
 
-    cssStyles[cssMap.cssProp || key] = cssMap.calc ?
+    const val = ['string', 'number'].includes(typeof target[key]) ? target[key] : target[key].value;
+
+    cssStyles[cssMap.cssProp] = cssMap.calc ?
       cssMap.calc(orig, target) :
-      `${target[key].value}${cssMap.unit}`;
+      `${val}${cssMap.unit}`;
 
     transitions.push(
-      generateTransitionString(cssMap.cssProp || key, key, target),
+      generateTransitionString(cssMap.cssProp, key, target),
     );
   }
 
