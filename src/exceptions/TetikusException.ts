@@ -1,4 +1,7 @@
-import { ExceptionLevel } from '@/types';
+export enum ExceptionLevel {
+  WARNING = 1,
+  ERROR = 2,
+}
 
 /**
  * Custom exception class for firing any exception that comes

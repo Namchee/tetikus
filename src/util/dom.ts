@@ -1,9 +1,9 @@
-import { TransformProps, TransformOpts, CSSStyles, CSSAnimation, ExceptionLevel } from '@/types';
+import { TransformProps, CSSStyles, CSSAnimation } from '@/types';
 import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
-import { TetikusException } from '@/exceptions/TetikusException';
+import { TetikusException, ExceptionLevel } from '@/exceptions/TetikusException';
 
 interface ConverterFunction {
-  (orig: Record<string, number | string>, target: TransformProps): string;
+  (ref: Record<string, number | string>, props: TransformProps): string;
 }
 
 interface CSSMap {
@@ -17,7 +17,7 @@ const keyMap: Map<string, CSSMap> = new Map([
     'size',
     {
       cssProp: 'transform',
-      calc: (orig: Record<string, number | string>, target: TransformProps) => {
+      calc: (orig: Record<string, any>, target: TransformProps) => {
         const sourceValue = target.size ?
           (typeof target.size === 'number' ? target.size : target.size.value) :
           orig.size;
@@ -57,34 +57,33 @@ const keyMap: Map<string, CSSMap> = new Map([
 /**
  * Utility function to translate transformation options to `transition` property
  *
- * @param {string} prop CSS property name
+ * @param {string} cssProp CSS property name
+ * @param {TransformProps} props Transform properties
  * @param {string} key Transformation key
- * @param {TransformOpts<string | number>} opts Transition configuration
  * @returns CSS-compatible `transition` property
  */
 function generateTransitionString(
-  prop: string,
+  cssProp: string,
+  props: TransformProps,
   key: string,
-  opts: Record<string, TransformOpts<string | number> >,
 ): string {
-  const duration = `${opts[key].duration || defaultTransitionSpeed.value}ms`;
-  const easingFunc = opts[key].easing || defaultEasingFunction.value;
-  const delay = `${opts[key].delay !== undefined ? opts[key].delay : defaultDelay.value}ms`;
+  const duration = `${props[key].duration || defaultTransitionSpeed.value}ms`;
+  const easingFunc = props[key].easing || defaultEasingFunction.value;
+  const delay = `${props[key].delay !== undefined ? props[key].delay : defaultDelay.value}ms`;
 
-  return `${prop} ${duration} ${easingFunc} ${delay}`;
+  return `${cssProp} ${duration} ${easingFunc} ${delay}`;
 }
-
 
 /**
  * Generate CSS style property from Tetikus props
  *
- * @param {Record<string, string | number>} props Tetikus props
+ * @param {Record<string, any>} ref Reference property / state
  * @returns CSS-compatible style objects
  */
-export function generateCSSStyles(props: Record<string, string | number>): CSSStyles {
+export function generateCSSStyles(ref: Record<string, any>): CSSStyles {
   const cssStyles: CSSStyles = {};
 
-  for (const key of Object.keys(props)) {
+  for (const key of Object.keys(ref)) {
     const cssMap = keyMap.get(key) as CSSMap;
 
     if (!cssMap) {
@@ -92,28 +91,47 @@ export function generateCSSStyles(props: Record<string, string | number>): CSSSt
     }
 
     cssStyles[cssMap.cssProp] = cssMap.calc ?
-      cssMap.calc(props, props) :
-      `${props[key]}${cssMap.unit}`;
+      cssMap.calc(ref, ref) :
+      `${ref[key]}${cssMap.unit}`;
   }
 
   return cssStyles;
 }
 
 /**
+ * Generate reference property from transformation props
+ *
+ * @param {TransformProps} props Transformation property
+ * @returns Reference property in form of `Record<string, any>`
+ * (similar to Tetikus props)
+ */
+export function generateRefFromProps(props: TransformProps): Record<string, any> {
+  const ref: Record<string, any> = {};
+
+  for (const key of Object.keys(props)) {
+    ref[key] = typeof props[key] === 'object' ?
+      props[key].value :
+      props[key];
+  }
+
+  return ref;
+}
+
+/**
  * Generate CSS transform style from two Tetikus props
  *
- * @param {Record<string | number>} orig Original property
- * @param {Record<string, TransformOpts<string | number>} target Desired transformation property
+ * @param {Record<any>} ref Reference property
+ * @param {TransformProps} props Desired transformation property
  * @returns CSS-compatible transition properties and options
  */
 export function generateCSSTransform(
-  orig: Record<string, string | number>,
-  target: Record<string, TransformOpts<string | number> >
+  ref: Record<string, any>,
+  props: TransformProps,
 ): CSSAnimation {
   const cssStyles: CSSStyles = {};
   const transitions: string[] = [];
 
-  for (const key of Object.keys(target)) {
+  for (const key of Object.keys(props)) {
     const cssMap = keyMap.get(key);
 
     if (!cssMap) {
@@ -121,14 +139,14 @@ export function generateCSSTransform(
       continue;
     }
 
-    const val = ['string', 'number'].includes(typeof target[key]) ? target[key] : target[key].value;
+    const val = ['string', 'number'].includes(typeof props[key]) ? props[key] : props[key].value;
 
     cssStyles[cssMap.cssProp] = cssMap.calc ?
-      cssMap.calc(orig, target) :
+      cssMap.calc(ref, props) :
       `${val}${cssMap.unit}`;
 
     transitions.push(
-      generateTransitionString(cssMap.cssProp, key, target),
+      generateTransitionString(cssMap.cssProp, props, key),
     );
   }
 

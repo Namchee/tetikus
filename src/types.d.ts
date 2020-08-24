@@ -1,8 +1,3 @@
-export enum ExceptionLevel {
-  WARNING = 1,
-  ERROR = 2,
-}
-
 export interface TransformOpts<T> {
   value: T;
   duration?: number;

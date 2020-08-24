@@ -12,9 +12,9 @@ import {
 
 import { throttle } from '@/util/throttle';
 import { lerp } from '@/util/math';
-import { generateCSSStyles, generateCSSTransform } from '@/util/dom';
+import { generateCSSStyles, generateCSSTransform, generateRefFromProps } from '@/util/dom';
 import { hoverState } from '@/directives/hover';
-import { TransformProps } from '@/types';
+import { TransformProps, HoverBehavior } from '@/types';
 import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from './options';
 
 // button mapping utility
@@ -151,6 +151,9 @@ export default defineComponent({
       y: 0,
     });
 
+    // click state, will be used on element out
+    const clickState = ref(false);
+
     // css styles for cursor wrapper element
     const wrapperStyle = computed(() => {
       const baseStyles: Record<string, unknown> = {
@@ -242,45 +245,6 @@ export default defineComponent({
       emit('tetikus-mouse-move', event);
     }, props.throttleSpeed);
 
-    // scale pointer size on mouse down
-    const handleMouseDown = (event: MouseEvent) => {
-      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
-        return;
-      }
-
-      if (!isCustomShape()) {
-        const cursorElem = cursor.value as HTMLElement;
-        const css = generateCSSTransform(props as Record<string, any>, props.clickBehavior);
-
-        for (const key of Object.keys(css.cssStyles)) {
-          cursorElem.style[key] = css.cssStyles[key];
-        }
-
-        cursorElem.style.transition = css.transitionString;
-      }
-
-      emit('tetikus-mouse-down', event);
-    }
-
-    // restore original pointer size on mouse up
-    const handleMouseUp = (event: MouseEvent) => {
-      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
-        return;
-      }
-
-      if (!isCustomShape()) {
-        const cursorElem = cursor.value as HTMLElement;
-
-        const cssStyles = generateCSSStyles(props as Record<string, any>);
-
-        for (const key of Object.keys(cssStyles)) {
-          cursorElem.style[key] = cssStyles[key];
-        }
-      }
-
-      emit('tetikus-mouse-up', event);
-    }
-
     // handle linear interpolation if option is enabled
     const handleLerp = () => {
       const cursorElem = wrapper.value as HTMLElement;
@@ -294,6 +258,103 @@ export default defineComponent({
       }
 
       requestAnimationFrame(handleLerp);
+    }
+
+    // scale pointer size on mouse down
+    const handleMouseDown = (event: MouseEvent) => {
+      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
+        return;
+      }
+
+      if (!isCustomShape()) {
+        const cursorElem = cursor.value as HTMLElement;
+        const transformRef = hoverState.value ?
+          generateRefFromProps(hoverState.value.transformProps) :
+          props as Record<string, any>;
+
+        const transformProps = generateCSSTransform(
+          transformRef,
+          props.clickBehavior,
+        );
+
+        for (const key of Object.keys(transformProps.cssStyles)) {
+          cursorElem.style[key] = transformProps.cssStyles[key];
+        }
+
+        cursorElem.style.transition = transformProps.transitionString;
+      }
+
+      clickState.value = true;
+
+      emit('tetikus-mouse-down', event);
+    }
+
+    // restore original pointer size on mouse up
+    const handleMouseUp = (event: MouseEvent) => {
+      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
+        return;
+      }
+
+      if (!isCustomShape()) {
+        const cursorElem = cursor.value as HTMLElement;
+        const transformRef = hoverState.value ?
+          generateRefFromProps(hoverState.value.transformProps) :
+          props as Record<string, any>;
+
+        const originalProps = generateCSSStyles(transformRef);
+
+        for (const key of Object.keys(originalProps)) {
+          cursorElem.style[key] = originalProps[key];
+        }
+      }
+
+      clickState.value = false;
+
+      emit('tetikus-mouse-up', event);
+    }
+
+    // handle cursor props on element hover
+    const handleElementIn = (
+      behavior: HoverBehavior,
+      prevBehavior: HoverBehavior | null,
+    ) => {
+      if (!behavior.custom && !isCustomShape()) {
+        const cursorElem = cursor.value as HTMLElement;
+        const transformRef = prevBehavior ?
+          generateRefFromProps(prevBehavior.transformProps) :
+          props as Record<string, any>;
+
+        const transformProps = generateCSSTransform(
+          transformRef,
+          behavior.transformProps,
+        );
+
+        for (const key of Object.keys(transformProps.cssStyles)) {
+          cursorElem.style[key] = transformProps.cssStyles[key];
+        }
+
+        cursorElem.style.transition = transformProps.transitionString;
+      }
+
+      emit('tetikus-element-in', behavior);
+    }
+
+    // handle cursor props when the cursor exits Tetikus-hoverable elements
+    const handleElementOut = () => {
+      if (!isCustomShape()) {
+        const cursorElem = cursor.value as HTMLElement;
+        const transformRef = clickState.value ?
+          generateRefFromProps(props.clickBehavior) :
+          props as Record<string, any>;
+
+        const originalProps = generateCSSStyles(transformRef);
+
+        for (const key of Object.keys(originalProps)) {
+          cursorElem.style[key] = originalProps[key];
+        }
+      }
+
+      emit('tetikus-element-out');
     }
 
     // attach event listeners
@@ -331,12 +392,12 @@ export default defineComponent({
       }
     });
 
-    // watch any hover state changes and emit event
-    watch(hoverState, (state) => {
-      if (state) {
-        emit('tetikus-element-hover', state);
+    // watch any hover state changes and pass it to correct handlers
+    watch(hoverState, (state, prevState) => {
+      if (!state) {
+        handleElementOut();
       } else {
-        emit('tetikus-element-out');
+        handleElementIn(state, prevState);
       }
     });
 

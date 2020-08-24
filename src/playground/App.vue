@@ -34,9 +34,6 @@ export default {
       <div class="bg-indigo-400 inline-block p-8 rounded mx-4">
         Indigo
       </div>
-      <div class="bg-gray-800 text-white inline-block p-8 rounded ml-4">
-        Dark Gray
-      </div>
     </section>
 
     <tetikus
