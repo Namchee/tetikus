@@ -262,7 +262,7 @@ export default defineComponent({
 
     // scale pointer size on mouse down
     const handleMouseDown = (event: MouseEvent) => {
-      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
+      if (!props.buttonMap.includes(buttonMap.get(event.button))) {
         return;
       }
 
