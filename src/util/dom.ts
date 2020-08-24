@@ -1,5 +1,6 @@
-import { TransformProps, TransformOpts, CSSStyles, CSSAnimation } from '@/types';
+import { TransformProps, TransformOpts, CSSStyles, CSSAnimation, ExceptionLevel } from '@/types';
 import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
+import { TetikusException } from '@/exceptions/TetikusException';
 
 interface ConverterFunction {
   (orig: Record<string, number | string>, target: TransformProps): string;
@@ -116,7 +117,7 @@ export function generateCSSTransform(
     const cssMap = keyMap.get(key);
 
     if (!cssMap) {
-      console.error(`Unregistered property transformation ${key}. Transformation property will be ignored`);
+      new TetikusException(`Unregistered property transformation ${key}. Transformation property will be ignored`, ExceptionLevel.WARNING);
       continue;
     }
 

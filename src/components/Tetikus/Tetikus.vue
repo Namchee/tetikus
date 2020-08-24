@@ -256,8 +256,6 @@ export default defineComponent({
           cursorElem.style[key] = css.cssStyles[key];
         }
 
-        console.log(css.cssStyles);
-
         cursorElem.style.transition = css.transitionString;
       }
 
