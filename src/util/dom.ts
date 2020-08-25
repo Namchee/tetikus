@@ -22,7 +22,9 @@ const keyMap: Map<string, CSSMap> = new Map([
           (typeof target.size === 'number' ? target.size : target.size.value) :
           orig.size;
 
-        return `scale(${sourceValue} / ${orig.size})`;
+        const val = sourceValue / orig.size;
+
+        return `scale(${val})`;
       },
       unit: 'px',
     }
