@@ -19,9 +19,9 @@ import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from './o
 
 // button mapping utility
 const buttonMap: Map<number, string> = new Map([
-  [1, 'left'],
-  [2, 'middle'],
-  [3, 'right'],
+  [0, 'left'],
+  [1, 'middle'],
+  [2, 'right'],
 ]);
 
 export default defineComponent({
@@ -291,7 +291,7 @@ export default defineComponent({
 
     // restore original pointer size on mouse up
     const handleMouseUp = (event: MouseEvent) => {
-      if (!props.buttonMap.includes(buttonMap.get(event.which))) {
+      if (!props.buttonMap.includes(buttonMap.get(event.button))) {
         return;
       }
 
@@ -318,6 +318,10 @@ export default defineComponent({
       behavior: HoverBehavior,
       prevBehavior: HoverBehavior | null,
     ) => {
+      if (clickState.value) { // prioritize button clicks
+        return;
+      }
+
       if (!behavior.custom && !isCustomShape()) {
         const cursorElem = cursor.value as HTMLElement;
         const transformRef = prevBehavior ?
@@ -328,6 +332,8 @@ export default defineComponent({
           transformRef,
           behavior.transformProps,
         );
+
+        console.log(transformProps);
 
         for (const key of Object.keys(transformProps.cssStyles)) {
           cursorElem.style[key] = transformProps.cssStyles[key];

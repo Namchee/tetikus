@@ -19,8 +19,11 @@ export default {
       Tetikus Playground
     </h1>
     <section class="px-8">
-      <h2 class="text-2xl mb-4" v-thover="{ color: 'red' }">
+      <h2 class="text-2xl" v-thover="{ color: 'green' }">
         Colored Background Test
+      </h2>
+      <h2 class="text-2xl mb-4" v-thover="{ color: 'blue', size: 128 }">
+        Colored Background Too
       </h2>
       <div class="bg-yellow-400 inline-block p-8 rounded mr-4">
         Yellow
