@@ -333,8 +333,6 @@ export default defineComponent({
           behavior.transformProps,
         );
 
-        console.log(transformProps);
-
         for (const key of Object.keys(transformProps.cssStyles)) {
           cursorElem.style[key] = transformProps.cssStyles[key];
         }
