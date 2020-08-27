@@ -297,15 +297,21 @@ export default defineComponent({
 
       if (!isCustomShape()) {
         const cursorElem = cursor.value as HTMLElement;
-        const transformRef = hoverState.value ?
-          generateRefFromProps(hoverState.value.transformProps) :
-          props as Record<string, any>;
 
-        const originalProps = generateCSSStyles(transformRef);
+        const transformProps = hoverState.value ?
+          generateCSSTransform(props.clickBehavior, hoverState.value.transformProps) :
+          generateCSSTransform(props.clickBehavior, props as Record<string, any>);
 
-        for (const key of Object.keys(originalProps)) {
-          cursorElem.style[key] = originalProps[key];
+          console.log(props.clickBehavior);
+          console.log((hoverState.value as HoverBehavior).transformProps);
+
+        console.log(transformProps);
+
+        for (const key of Object.keys(transformProps.cssStyles)) {
+          cursorElem.style[key] = transformProps.cssStyles[key];
         }
+
+        cursorElem.style.transition = transformProps.transitionString;
       }
 
       clickState.value = false;

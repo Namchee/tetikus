@@ -19,10 +19,10 @@ export default {
       Tetikus Playground
     </h1>
     <section class="px-8">
-      <h2 class="text-2xl" v-thover="{ color: 'green', size: 96 }">
+      <h2 class="text-2xl" v-thover="{ color: 'green', scale: 1.5 }">
         Colored Background Test
       </h2>
-      <h2 class="text-2xl mb-4" v-thover="{ color: 'blue', size: 128 }">
+      <h2 class="text-2xl mb-4" v-thover="{ color: 'blue', scale: 2 }">
         Colored Background Too
       </h2>
       <div class="bg-yellow-400 inline-block p-8 rounded mr-4">
@@ -45,7 +45,7 @@ export default {
       :strokeColor="'#121212'"
       :size="64"
       :hideOnOut="false"
-      :clickBehavior="{ color: 'rgba(255, 0, 0, .25)' }"
+      :clickBehavior="{ color: 'rgba(255, 0, 0, .25)', scale: 0.8 }"
       :lerp=".2"
     />
   </main>

@@ -2,31 +2,21 @@ import { TransformProps, CSSStyles, CSSAnimation } from '@/types';
 import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
 import { TetikusException, ExceptionLevel } from '@/exceptions/TetikusException';
 
-interface ConverterFunction {
-  (ref: Record<string, number | string>, props: TransformProps): string;
-}
-
 interface CSSMap {
   unit: string;
   cssProp: string;
-  calc?: ConverterFunction;
+  calc?: (value: string | number) => string;
 }
 
 const keyMap: Map<string, CSSMap> = new Map([
   [
-    'size',
+    'scale',
     {
       cssProp: 'transform',
-      calc: (orig: Record<string, any>, target: TransformProps) => {
-        const sourceValue = target.size ?
-          (typeof target.size === 'number' ? target.size : target.size.value) :
-          orig.size;
-
-        const val = sourceValue / orig.size;
-
-        return `scale(${val})`;
-      },
-      unit: 'px',
+      unit: '',
+      calc: (value: string | number) => {
+        return `scale(${value})`;
+      }
     }
   ],
   [
@@ -93,7 +83,7 @@ export function generateCSSStyles(ref: Record<string, any>): CSSStyles {
     }
 
     cssStyles[cssMap.cssProp] = cssMap.calc ?
-      cssMap.calc(ref, ref) :
+      cssMap.calc(ref[key]) :
       `${ref[key]}${cssMap.unit}`;
   }
 
@@ -144,7 +134,7 @@ export function generateCSSTransform(
     const val = ['string', 'number'].includes(typeof props[key]) ? props[key] : props[key].value;
 
     cssStyles[cssMap.cssProp] = cssMap.calc ?
-      cssMap.calc(ref, props) :
+      cssMap.calc(props[key]) :
       `${val}${cssMap.unit}`;
 
     transitions.push(

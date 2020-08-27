@@ -5,7 +5,7 @@ export interface TransformOpts<T> {
   easing?: string;
 }
 export interface TransformProps {
-  size?: TransformOpts<number> | number;
+  scale?: TransformOpts<number> | number;
   color?: TransformOpts<string> | string;
   strokeWidth?: TransformOpts<number> | number;
   strokeColor?: TransformOpts<string> | string;
