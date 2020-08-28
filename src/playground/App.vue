@@ -41,11 +41,11 @@ export default {
 
     <tetikus
       :color="'transparent'"
-      :strokeWidth="1.5"
+      :strokeWidth="2"
       :strokeColor="'#121212'"
       :size="64"
       :hideOnOut="false"
-      :clickBehavior="{ color: 'rgba(255, 0, 0, .25)', scale: 0.8 }"
+      :clickBehavior="{ color: 'rgba(255, 0, 0, .25)', scale: 0.8, strokeWidth: 10 }"
       :lerp=".2"
     />
   </main>

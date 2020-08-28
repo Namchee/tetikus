@@ -12,7 +12,7 @@ import {
 
 import { throttle } from '@/util/throttle';
 import { lerp } from '@/util/math';
-import { generateCSSStyles, generateCSSTransform, generateRefFromProps } from '@/util/dom';
+import { generateCSSTransform } from '@/util/dom';
 import { hoverState } from '@/directives/hover';
 import { TransformProps, HoverBehavior } from '@/types';
 import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from './options';
@@ -40,7 +40,7 @@ export default defineComponent({
     },
 
     // determine stroke width for default cursor shape
-    strokeWidth: {
+    borderWidth: {
       type: Number,
       default: 0,
     },
@@ -53,7 +53,7 @@ export default defineComponent({
 
     // determine stroke color for default cursor shape
     // won't have any effect if stroke width is 0
-    strokeColor: {
+    borderColor: {
       type: String,
       default: '#121212',
     },
@@ -179,9 +179,9 @@ export default defineComponent({
     const cursorStyle = computed(() => {
       return {
         'background': props.color,
-        'border-width': `${props.strokeWidth}px`,
+        'border-width': `${props.borderWidth}px`,
         'border-style': 'solid',
-        'border-color': props.strokeColor,
+        'border-color': props.borderColor,
         'width': `${props.size}px`,
         'height': `${props.size}px`,
       };
@@ -207,6 +207,26 @@ export default defineComponent({
       return !!slots.default;
     }
 
+    // getter for wrapper element
+    const getWrapperElement = () => {
+      return wrapper.value as HTMLElement;
+    }
+
+    // getter for cursor element
+    const getCursorElement = () => {
+      return cursor.value as HTMLElement;
+    }
+
+    // default cursor styling
+    const defaultTransformStyle = computed(() => {
+      return {
+        scale: 1,
+        color: props.color,
+        borderWidth: props.borderWidth,
+        strokeColor: props.borderColor,
+      };
+    });
+
     /**
      * Begin event listeners part
      * These functions should only be called on mounted-related hooks
@@ -214,11 +234,11 @@ export default defineComponent({
 
     // restore default cursor on mouse out
     const handleMouseOut = () => {
-      const wrapperElem = wrapper.value as HTMLElement;
+      const el = getWrapperElement();
       document.body.style.cursor = 'auto';
 
       if (props.hideOnOut) {
-        wrapperElem.classList.add('tetikus--leave');
+        el.classList.add('tetikus--leave');
       }
 
       emit('tetikus-window-leave');
@@ -230,9 +250,9 @@ export default defineComponent({
         document.body.style.cursor = 'none';
       }
 
-      const wrapperElem = wrapper.value as HTMLElement;
+      const el = getWrapperElement();
 
-      wrapperElem.classList.remove('tetikus--leave');
+      el.classList.remove('tetikus--leave');
 
       emit('tetikus-window-enter');
     };
@@ -247,14 +267,15 @@ export default defineComponent({
 
     // handle linear interpolation if option is enabled
     const handleLerp = () => {
-      const cursorElem = wrapper.value as HTMLElement;
+      const el = getWrapperElement();
 
-      if (cursorElem) {
-        const x = lerp(cursorElem.style.left, mousePos.x, props.lerp);
-        const y = lerp(cursorElem.style.top, mousePos.y, props.lerp);
+      // prevent running function on unmounted state
+      if (el) {
+        const x = lerp(el.style.left, mousePos.x, props.lerp);
+        const y = lerp(el.style.top, mousePos.y, props.lerp);
 
-        cursorElem.style.left = `${x}px`;
-        cursorElem.style.top = `${y}px`;
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
       }
 
       requestAnimationFrame(handleLerp);
@@ -267,21 +288,25 @@ export default defineComponent({
       }
 
       if (!isCustomShape()) {
-        const cursorElem = cursor.value as HTMLElement;
-        const transformRef = hoverState.value ?
-          generateRefFromProps(hoverState.value.transformProps) :
-          props as Record<string, any>;
+        const el = getCursorElement();
+        const transformRef = Object.assign(
+          hoverState.value?.transformProps || {},
+          defaultTransformStyle.value,
+        );
 
         const transformProps = generateCSSTransform(
           transformRef,
-          props.clickBehavior,
+          {
+            ...defaultTransformStyle.value,
+            ...props.clickBehavior,
+          },
         );
 
         for (const key of Object.keys(transformProps.cssStyles)) {
-          cursorElem.style[key] = transformProps.cssStyles[key];
+          el.style[key] = transformProps.cssStyles[key];
         }
 
-        cursorElem.style.transition = transformProps.transitionString;
+        el.style.transition = transformProps.transitionString;
       }
 
       clickState.value = true;
@@ -296,22 +321,22 @@ export default defineComponent({
       }
 
       if (!isCustomShape()) {
-        const cursorElem = cursor.value as HTMLElement;
+        const el = getCursorElement();
 
-        const transformProps = hoverState.value ?
-          generateCSSTransform(props.clickBehavior, hoverState.value.transformProps) :
-          generateCSSTransform(props.clickBehavior, props as Record<string, any>);
+        const transformTarget: TransformProps = hoverState.value ?
+          hoverState.value.transformProps :
+          defaultTransformStyle.value as TransformProps;
 
-          console.log(props.clickBehavior);
-          console.log((hoverState.value as HoverBehavior).transformProps);
-
-        console.log(transformProps);
+        const transformProps = generateCSSTransform(
+          props.clickBehavior,
+          transformTarget,
+        );
 
         for (const key of Object.keys(transformProps.cssStyles)) {
-          cursorElem.style[key] = transformProps.cssStyles[key];
+          el.style[key] = transformProps.cssStyles[key];
         }
 
-        cursorElem.style.transition = transformProps.transitionString;
+        el.style.transition = transformProps.transitionString;
       }
 
       clickState.value = false;
@@ -329,10 +354,11 @@ export default defineComponent({
       }
 
       if (!behavior.custom && !isCustomShape()) {
-        const cursorElem = cursor.value as HTMLElement;
-        const transformRef = prevBehavior ?
-          generateRefFromProps(prevBehavior.transformProps) :
-          props as Record<string, any>;
+        const el = getCursorElement();
+        const transformRef = Object.assign(
+          prevBehavior?.transformProps || {},
+          defaultTransformStyle.value,
+        );
 
         const transformProps = generateCSSTransform(
           transformRef,
@@ -340,28 +366,33 @@ export default defineComponent({
         );
 
         for (const key of Object.keys(transformProps.cssStyles)) {
-          cursorElem.style[key] = transformProps.cssStyles[key];
+          el.style[key] = transformProps.cssStyles[key];
         }
 
-        cursorElem.style.transition = transformProps.transitionString;
+        el.style.transition = transformProps.transitionString;
       }
 
       emit('tetikus-element-in', behavior);
     }
 
     // handle cursor props when the cursor exits Tetikus-hoverable elements
-    const handleElementOut = () => {
+    const handleElementOut = (prevBehavior: HoverBehavior) => {
       if (!isCustomShape()) {
-        const cursorElem = cursor.value as HTMLElement;
-        const transformRef = clickState.value ?
-          generateRefFromProps(props.clickBehavior) :
+        const el = getCursorElement();
+        const transformTarget = clickState.value ?
+          prevBehavior.transformProps :
           props as Record<string, any>;
 
-        const originalProps = generateCSSStyles(transformRef);
+        const transformProps = generateCSSTransform(
+          prevBehavior.transformProps,
+          transformTarget,
+        );
 
-        for (const key of Object.keys(originalProps)) {
-          cursorElem.style[key] = originalProps[key];
+        for (const key of Object.keys(transformProps.cssStyles)) {
+          el.style[key] = transformProps.cssStyles[key];
         }
+
+        el.style.transition = transformProps.transitionString;
       }
 
       emit('tetikus-element-out');
@@ -405,7 +436,7 @@ export default defineComponent({
     // watch any hover state changes and pass it to correct handlers
     watch(hoverState, (state, prevState) => {
       if (!state) {
-        handleElementOut();
+        handleElementOut(prevState as HoverBehavior);
       } else {
         handleElementIn(state, prevState);
       }

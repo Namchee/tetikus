@@ -7,8 +7,8 @@ export interface TransformOpts<T> {
 export interface TransformProps {
   scale?: TransformOpts<number> | number;
   color?: TransformOpts<string> | string;
-  strokeWidth?: TransformOpts<number> | number;
-  strokeColor?: TransformOpts<string> | string;
+  borderWidth?: TransformOpts<number> | number;
+  borderColor?: TransformOpts<string> | string;
   opacity?: TransformOpts<number> | number;
 }
 

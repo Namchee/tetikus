@@ -24,14 +24,14 @@ const keyMap: Map<string, CSSMap> = new Map([
     { cssProp: 'background', unit: '' },
   ],
   [
-    'strokeWidth',
+    'borderWidth',
     {
       cssProp: 'border-width',
       unit: 'px',
     },
   ],
   [
-    'strokeColor',
+    'borderColor',
     {
       cssProp: 'border-color',
       unit: '',
@@ -64,49 +64,6 @@ function generateTransitionString(
   const delay = `${props[key].delay !== undefined ? props[key].delay : defaultDelay.value}ms`;
 
   return `${cssProp} ${duration} ${easingFunc} ${delay}`;
-}
-
-/**
- * Generate CSS style property from Tetikus props
- *
- * @param {Record<string, any>} ref Reference property / state
- * @returns CSS-compatible style objects
- */
-export function generateCSSStyles(ref: Record<string, any>): CSSStyles {
-  const cssStyles: CSSStyles = {};
-
-  for (const key of Object.keys(ref)) {
-    const cssMap = keyMap.get(key) as CSSMap;
-
-    if (!cssMap) {
-      continue;
-    }
-
-    cssStyles[cssMap.cssProp] = cssMap.calc ?
-      cssMap.calc(ref[key]) :
-      `${ref[key]}${cssMap.unit}`;
-  }
-
-  return cssStyles;
-}
-
-/**
- * Generate reference property from transformation props
- *
- * @param {TransformProps} props Transformation property
- * @returns Reference property in form of `Record<string, any>`
- * (similar to Tetikus props)
- */
-export function generateRefFromProps(props: TransformProps): Record<string, any> {
-  const ref: Record<string, any> = {};
-
-  for (const key of Object.keys(props)) {
-    ref[key] = typeof props[key] === 'object' ?
-      props[key].value :
-      props[key];
-  }
-
-  return ref;
 }
 
 /**
