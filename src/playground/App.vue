@@ -45,14 +45,12 @@ export default {
       :borderColor="'#121212'"
       :size="64"
       :hideOnOut="false"
-      :clickBehavior="{ color: 'rgba(255, 0, 0, .25)', scale: { value: .8, duration: 1000 }, borderWidth: 10 }"
+      :clickBehavior="{ scale: { value: .5, duration: 600, easing: 'cubic-bezier(0.33, 1, 0.68, 1)' } }"
       :lerp=".2"
-    />
+    >
+    </tetikus>
   </main>
 </template>
 
 <style lang="postcss" scoped>
-.main {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
 </style>

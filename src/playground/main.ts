@@ -1,5 +1,4 @@
 import { createApp } from 'vue';
-import 'typeface-inter';
 import './style.css';
 import App from './App.vue';
 

@@ -71,14 +71,14 @@ function generateTransitionString(
  *
  * @param {TransformProps} ref Reference property
  * @param {TransformProps} props Desired transformation property
- * @param {boolean} pickRef Indicates if the transition should be directly referenced
- * to reference property or not
+ * @param {boolean} pickRef Indicates if any missing transition properties should
+ * be referenced from source or not
  * @returns CSS-compatible transition properties and options
  */
 export function generateCSSTransform(
   ref: TransformProps,
   props: TransformProps,
-  pickRef = false,
+  pickRef: boolean,
 ): CSSAnimation {
   const cssStyles: CSSStyles = {};
   const transitions: string[] = [];
@@ -87,7 +87,7 @@ export function generateCSSTransform(
     const cssMap = keyMap.get(key);
 
     if (!cssMap) {
-      // new TetikusException(`Unregistered property transformation ${key}. Transformation property will be ignored`, ExceptionLevel.WARNING);
+      new TetikusException(`Unregistered property transformation ${key}. Transformation property will be ignored`, ExceptionLevel.WARNING);
       continue;
     }
 

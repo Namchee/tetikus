@@ -48,7 +48,7 @@ export default defineComponent({
     // background color for default pointer
     color: {
       type: String,
-      default: '#121212',
+      default: 'transparent',
     },
 
     // determine stroke color for default cursor shape
@@ -212,11 +212,6 @@ export default defineComponent({
       return wrapper.value as HTMLElement;
     }
 
-    // getter for cursor element
-    const getCursorElement = () => {
-      return cursor.value as HTMLElement;
-    }
-
     // default cursor styling
     const defaultTransformStyle = computed(() => {
       return {
@@ -226,6 +221,27 @@ export default defineComponent({
         borderColor: props.borderColor,
       };
     });
+
+    // utility function to apply transformation on cursor element
+    const applyTransform = (
+      ref: TransformProps,
+      target: TransformProps,
+      pickRef: boolean,
+    ) => {
+      const el = cursor.value as HTMLElement;
+
+      const { cssStyles, transitionString } = generateCSSTransform(
+        ref,
+        target,
+        pickRef,
+      )
+
+      Object.keys(cssStyles).forEach((prop: string) => {
+        el.style[prop] = cssStyles[prop];
+      });
+
+      el.style.transition = transitionString;
+    }
 
     /**
      * Begin event listeners part
@@ -281,32 +297,24 @@ export default defineComponent({
       requestAnimationFrame(handleLerp);
     }
 
-    // scale pointer size on mouse down
+    // apply transformation on mouse button press
     const handleMouseDown = (event: MouseEvent) => {
       if (!props.buttonMap.includes(buttonMap.get(event.button))) {
         return;
       }
 
       if (!isCustomShape()) {
-        const el = getCursorElement();
         const transformRef = {
           ...hoverState.value?.transformProps || {},
           ...defaultTransformStyle.value,
         };
 
-        const transformProps = generateCSSTransform(
-          transformRef,
-          {
-            ...defaultTransformStyle.value,
-            ...props.clickBehavior,
-          },
-        );
+        const transformTarget = {
+          ...defaultTransformStyle.value,
+          ...props.clickBehavior,
+        };
 
-        for (const key of Object.keys(transformProps.cssStyles)) {
-          el.style[key] = transformProps.cssStyles[key];
-        }
-
-        el.style.transition = transformProps.transitionString;
+        applyTransform(transformRef, transformTarget, false);
       }
 
       clickState.value = true;
@@ -314,33 +322,23 @@ export default defineComponent({
       emit('tetikus-mouse-down', event);
     }
 
-    // restore original pointer size on mouse up
+    // apply another transform on cursor when mouse button is lifted
     const handleMouseUp = (event: MouseEvent) => {
       if (!props.buttonMap.includes(buttonMap.get(event.button))) {
         return;
       }
 
       if (!isCustomShape()) {
-        const el = getCursorElement();
-
-        const transformTarget: TransformProps = hoverState.value ?
+        const baseTarget = hoverState.value ?
           hoverState.value.transformProps :
           defaultTransformStyle.value;
 
-        const transformProps = generateCSSTransform(
-          props.clickBehavior,
-          {
-            ...defaultTransformStyle.value,
-            ...transformTarget,
-          },
-          true,
-        );
+        const transformTarget = {
+          ...defaultTransformStyle.value,
+          ...baseTarget,
+        };
 
-        for (const key of Object.keys(transformProps.cssStyles)) {
-          el.style[key] = transformProps.cssStyles[key];
-        }
-
-        el.style.transition = transformProps.transitionString;
+        applyTransform(props.clickBehavior, transformTarget, true);
       }
 
       clickState.value = false;
@@ -355,21 +353,12 @@ export default defineComponent({
       }
 
       if (!behavior.custom && !isCustomShape()) {
-        const el = getCursorElement();
+        const transformTarget = {
+          ...defaultTransformStyle.value,
+          ...behavior.transformProps,
+        };
 
-        const transformProps = generateCSSTransform(
-          defaultTransformStyle.value,
-          {
-            ...defaultTransformStyle.value,
-            ...behavior.transformProps,
-          },
-        );
-
-        for (const key of Object.keys(transformProps.cssStyles)) {
-          el.style[key] = transformProps.cssStyles[key];
-        }
-
-        el.style.transition = transformProps.transitionString;
+        applyTransform(defaultTransformStyle.value, transformTarget, false);
       }
 
       emit('tetikus-element-in', behavior);
@@ -378,18 +367,7 @@ export default defineComponent({
     // handle cursor props when the cursor exits Tetikus-hoverable elements
     const handleElementOut = (prevBehavior: HoverBehavior) => {
       if (!isCustomShape() && !clickState.value) {
-        const el = getCursorElement();
-
-        const transformProps = generateCSSTransform(
-          prevBehavior.transformProps,
-          defaultTransformStyle.value,
-        );
-
-        for (const key of Object.keys(transformProps.cssStyles)) {
-          el.style[key] = transformProps.cssStyles[key];
-        }
-
-        el.style.transition = transformProps.transitionString;
+        applyTransform(prevBehavior.transformProps, defaultTransformStyle.value, true);
       }
 
       emit('tetikus-element-out');

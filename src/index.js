@@ -1,9 +1,15 @@
 import Tetikus from '@/component/Tetikus';
-import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
+import { TetikusHover } from '@/directives/hover';
+import {
+  defaultTransitionSpeed,
+  defaultEasingFunction,
+  defaultDelay,
+} from '@/components/Tetikus/options';
 
 export default {
-  install(app, { transitionSpeed, easing, delay }) {
+  install(app, { directiveName, transitionSpeed, easing, delay }) {
     app.component('Tetikus', Tetikus);
+    app.directive(directiveName || 'thover', TetikusHover);
 
     if (transitionSpeed) {
       defaultTransitionSpeed.value = transitionSpeed;
