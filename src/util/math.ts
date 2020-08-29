@@ -1,3 +1,5 @@
+import { TetikusException } from '@/exceptions/TetikusException';
+
 // utility function to convert CSS computed values to px
 function parseCSSVars(val: number | string): number {
   if (typeof val === 'number') {
@@ -14,7 +16,7 @@ function parseCSSVars(val: number | string): number {
     return Number(val.substring(0, val.length - 3)) * 16;
   }
 
-  throw new Error('Unsupported variable type');
+  throw new TetikusException(`Unsupported variable type from ${val}`);
 }
 
 /**

@@ -27,6 +27,7 @@ export class TetikusException extends Error {
         if (process.env.NODE_ENV === 'development') {
           console.warn(this.message);
         }
+        break;
       }
     }
   }

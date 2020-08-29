@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve src/playground/main.ts",
     "build": "vue-cli-service build --target lib --modern ./src/index.js",
     "lint": "vue-cli-service lint",
+    "test": "ava",
     "postuninstall": "npm prune"
   },
   "dependencies": {
@@ -25,9 +26,13 @@
     "ava": "^3.12.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-alpha.0",
+    "esm": "^3.2.25",
     "lint-staged": "^9.5.0",
     "precss": "^4.0.0",
+    "sinon": "^9.0.3",
     "tailwindcss": "^1.6.2",
+    "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "~3.9.3",
     "vue-cli-plugin-vue-next": "~0.1.3"
   },
@@ -39,5 +44,19 @@
       "vue-cli-service lint",
       "git add"
     ]
+  },
+  "ava": {
+    "files": [
+      "src/**/*.test.ts"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "esm",
+      "ts-node/register",
+      "tsconfig-paths/register"
+    ],
+    "verbose": true
   }
 }
