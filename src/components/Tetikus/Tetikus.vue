@@ -223,7 +223,7 @@ export default defineComponent({
         scale: 1,
         color: props.color,
         borderWidth: props.borderWidth,
-        strokeColor: props.borderColor,
+        borderColor: props.borderColor,
       };
     });
 
@@ -289,10 +289,10 @@ export default defineComponent({
 
       if (!isCustomShape()) {
         const el = getCursorElement();
-        const transformRef = Object.assign(
-          hoverState.value?.transformProps || {},
-          defaultTransformStyle.value,
-        );
+        const transformRef = {
+          ...hoverState.value?.transformProps || {},
+          ...defaultTransformStyle.value,
+        };
 
         const transformProps = generateCSSTransform(
           transformRef,
@@ -325,11 +325,15 @@ export default defineComponent({
 
         const transformTarget: TransformProps = hoverState.value ?
           hoverState.value.transformProps :
-          defaultTransformStyle.value as TransformProps;
+          defaultTransformStyle.value;
 
         const transformProps = generateCSSTransform(
           props.clickBehavior,
-          transformTarget,
+          {
+            ...defaultTransformStyle.value,
+            ...transformTarget,
+          },
+          true,
         );
 
         for (const key of Object.keys(transformProps.cssStyles)) {
@@ -345,24 +349,20 @@ export default defineComponent({
     }
 
     // handle cursor props on element hover
-    const handleElementIn = (
-      behavior: HoverBehavior,
-      prevBehavior: HoverBehavior | null,
-    ) => {
+    const handleElementIn = (behavior: HoverBehavior) => {
       if (clickState.value) { // prioritize button clicks
         return;
       }
 
       if (!behavior.custom && !isCustomShape()) {
         const el = getCursorElement();
-        const transformRef = Object.assign(
-          prevBehavior?.transformProps || {},
-          defaultTransformStyle.value,
-        );
 
         const transformProps = generateCSSTransform(
-          transformRef,
-          behavior.transformProps,
+          defaultTransformStyle.value,
+          {
+            ...defaultTransformStyle.value,
+            ...behavior.transformProps,
+          },
         );
 
         for (const key of Object.keys(transformProps.cssStyles)) {
@@ -377,15 +377,12 @@ export default defineComponent({
 
     // handle cursor props when the cursor exits Tetikus-hoverable elements
     const handleElementOut = (prevBehavior: HoverBehavior) => {
-      if (!isCustomShape()) {
+      if (!isCustomShape() && !clickState.value) {
         const el = getCursorElement();
-        const transformTarget = clickState.value ?
-          prevBehavior.transformProps :
-          props as Record<string, any>;
 
         const transformProps = generateCSSTransform(
           prevBehavior.transformProps,
-          transformTarget,
+          defaultTransformStyle.value,
         );
 
         for (const key of Object.keys(transformProps.cssStyles)) {
@@ -438,7 +435,7 @@ export default defineComponent({
       if (!state) {
         handleElementOut(prevState as HoverBehavior);
       } else {
-        handleElementIn(state, prevState);
+        handleElementIn(state);
       }
     });
 

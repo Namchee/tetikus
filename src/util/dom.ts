@@ -59,9 +59,9 @@ function generateTransitionString(
   props: TransformProps,
   key: string,
 ): string {
-  const duration = `${props[key].duration || defaultTransitionSpeed.value}ms`;
-  const easingFunc = props[key].easing || defaultEasingFunction.value;
-  const delay = `${props[key].delay !== undefined ? props[key].delay : defaultDelay.value}ms`;
+  const duration = `${props[key]?.duration || defaultTransitionSpeed.value}ms`;
+  const easingFunc = props[key]?.easing || defaultEasingFunction.value;
+  const delay = `${props[key]?.delay !== undefined ? props[key].delay : defaultDelay.value}ms`;
 
   return `${cssProp} ${duration} ${easingFunc} ${delay}`;
 }
@@ -69,13 +69,16 @@ function generateTransitionString(
 /**
  * Generate CSS transform style from two Tetikus props
  *
- * @param {Record<any>} ref Reference property
+ * @param {TransformProps} ref Reference property
  * @param {TransformProps} props Desired transformation property
+ * @param {boolean} pickRef Indicates if the transition should be directly referenced
+ * to reference property or not
  * @returns CSS-compatible transition properties and options
  */
 export function generateCSSTransform(
-  ref: Record<string, any>,
+  ref: TransformProps,
   props: TransformProps,
+  pickRef = false,
 ): CSSAnimation {
   const cssStyles: CSSStyles = {};
   const transitions: string[] = [];
@@ -84,18 +87,20 @@ export function generateCSSTransform(
     const cssMap = keyMap.get(key);
 
     if (!cssMap) {
-      new TetikusException(`Unregistered property transformation ${key}. Transformation property will be ignored`, ExceptionLevel.WARNING);
+      // new TetikusException(`Unregistered property transformation ${key}. Transformation property will be ignored`, ExceptionLevel.WARNING);
       continue;
     }
 
-    const val = ['string', 'number'].includes(typeof props[key]) ? props[key] : props[key].value;
+    const val = ['string', 'number'].includes(typeof props[key]) ?
+      props[key] :
+      props[key].value;
 
     cssStyles[cssMap.cssProp] = cssMap.calc ?
-      cssMap.calc(props[key]) :
+      cssMap.calc(val) :
       `${val}${cssMap.unit}`;
 
     transitions.push(
-      generateTransitionString(cssMap.cssProp, props, key),
+      generateTransitionString(cssMap.cssProp, pickRef ? ref : props, key),
     );
   }
 
