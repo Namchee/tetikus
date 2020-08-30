@@ -1,4 +1,5 @@
 import test from 'ava';
+import { stub } from 'sinon';
 import { lerp } from './math';
 import { TetikusException } from '@/exceptions/TetikusException';
 
@@ -21,7 +22,12 @@ test('should be able to parse rem format', t => {
 });
 
 test('should throw an error if format is unknown', t => {
+  const consoleSpy = stub(console, 'error');
+
   t.throws(() => {
     lerp('1em', '2em', 0.1);
   }, { instanceOf: TetikusException });
+
+  t.is(consoleSpy.callCount, 1);
+  consoleSpy.restore();
 });

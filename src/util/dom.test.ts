@@ -1,5 +1,5 @@
 import test from 'ava';
-// import sinon from 'sinon';
+import { stub } from 'sinon';
 import { generateCSSTransform } from './dom';
 import { CSSAnimation, TransformProps } from '../types';
 
@@ -97,6 +97,8 @@ test('should be able to read properties from reference', t => {
 });
 
 test('should warn on console when transform properties is unknown', t => {
+  const consoleSpy = stub(console, 'warn');
+
   const transformRef = {};
 
   const transformTarget = {
@@ -111,4 +113,7 @@ test('should warn on console when transform properties is unknown', t => {
   const transformResult = generateCSSTransform(transformRef, transformTarget, false);
 
   t.deepEqual(transformResult, expected);
+  t.is(consoleSpy.callCount, 1);
+
+  consoleSpy.restore();
 });
