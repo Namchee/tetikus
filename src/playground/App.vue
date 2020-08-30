@@ -42,4 +42,13 @@ export default {};
 </template>
 
 <style lang="postcss" scoped>
+.w-screen {
+  width: 100vw;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+
 </style>

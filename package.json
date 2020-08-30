@@ -28,7 +28,6 @@
     "lint-staged": "^9.5.0",
     "precss": "^4.0.0",
     "sinon": "^9.0.3",
-    "tailwindcss": "^1.6.2",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "~3.9.3",
