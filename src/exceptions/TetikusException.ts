@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 export enum ExceptionLevel {
   WARNING = 1,
   ERROR = 2,

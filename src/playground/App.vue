@@ -1,16 +1,5 @@
 <script lang="ts">
-import Tetikus from '@/components/Tetikus';
-import { TetikusHover } from '@/directives/hover';
-
-export default {
-  components: {
-    Tetikus,
-  },
-
-  directives: {
-    thover: TetikusHover,
-  },
-}
+export default {};
 </script>
 
 <template>

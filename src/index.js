@@ -1,4 +1,4 @@
-import Tetikus from '@/component/Tetikus';
+import Tetikus from '@/components/Tetikus';
 import { TetikusHover } from '@/directives/hover';
 import {
   defaultTransitionSpeed,
@@ -7,7 +7,7 @@ import {
 } from '@/components/Tetikus/options';
 
 export default {
-  install(app, { directiveName, transitionSpeed, easing, delay }) {
+  install(app, { directiveName, transitionSpeed, easing, delay } = {}) {
     app.component('Tetikus', Tetikus);
     app.directive(directiveName || 'thover', TetikusHover);
 
@@ -27,4 +27,4 @@ export default {
 
 // re-export the component using named export
 // just in case someone want to use it in one component
-export { Tetikus };
+export { Tetikus, TetikusHover, defaultTransitionSpeed, defaultEasingFunction, defaultDelay };

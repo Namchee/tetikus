@@ -8,6 +8,8 @@ Tetikus is a custom cursor component made for Vue 3.
 
 TODO
 
+- Depends on nothing, all features are implemented with pure CSS, JS, and Vue ✌️.
+
 ## Installation
 
 TODO
