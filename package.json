@@ -2,7 +2,7 @@
   "name": "tetikus",
   "version": "0.1.0",
   "description": "A custom cursor component for Vue 3 ✌️",
-  "main": "./dist/tetikus.common.js",
+  "main": "index.js",
   "keywords": [
     "javascript",
     "vuejs",
@@ -20,13 +20,12 @@
   },
   "scripts": {
     "postuninstall": "npm prune",
-    "build": "vue-cli-service build --target lib --name tetikus ./src/index.js",
+    "build": "vue-cli-service build --target lib --name tetikus --mode production ./src/index.js",
     "build:report": "npm run build -- --report",
     "build:watch": "npm run build -- --watch",
     "lint": "vue-cli-service lint",
     "test": "ava"
   },
-  "types": "src/types.d.ts",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
