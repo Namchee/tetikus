@@ -2,12 +2,13 @@
 
 Tetikus is a custom cursor component made for Vue 3.
 
-> ⚠️ WARNING: This component **DOES NOT WORK** with Vue 2! Consider upgrading to Vue 3 as it's really close from being released
+> ⚠️ WARNING: This component **DOES NOT WORK** with Vue 2! Consider upgrading to Vue 3 as it's really close from being released.
 
 ## Features
 
-TODO
-
+- Easily customizable, you're not locked with basic circle shape!
+- Relatively performant
+- Relatively small (6KB gzipped)
 - Depends on nothing, all features are implemented with pure CSS, JS, and Vue ✌️.
 
 ## Installation
