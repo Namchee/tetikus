@@ -1,7 +1,23 @@
 {
   "name": "tetikus",
   "version": "0.1.0",
-  "private": true,
+  "description": "A custom cursor component for Vue 3 ✌️",
+  "main": "./dist/tetikus.common.js",
+  "keywords": [
+    "javascript",
+    "vuejs",
+    "vuejs3",
+    "custom-cursor"
+  ],
+  "homepage": "https://github.com/Namchee/tetikus",
+  "author": {
+    "name": "Cristopher Namchee",
+    "email": "cristophernamchee12@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Namchee/tetikus.git"
+  },
   "scripts": {
     "postuninstall": "npm prune",
     "build": "vue-cli-service build --target lib --name tetikus ./src/index.js",
