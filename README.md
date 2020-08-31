@@ -22,7 +22,9 @@ TODO
 1. Clone this repository
 2. Navigate to the project directory
 3. Install all required dependency by executing `npm install` from your terminal
-4. Execute `npm run serve` from your terminal and the playground can be accessed from `localhost:8080`
+4. [Link the project with the playground](https://medium.com/dailyjs/how-to-use-npm-link-7375b6219557)
+5. Execute `npm run build:watch` from your terminal
+6. Happy developing!
 
 ## License
 
