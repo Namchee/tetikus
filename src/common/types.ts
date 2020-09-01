@@ -1,9 +1,15 @@
+export enum ExceptionLevel {
+  WARNING = 1,
+  ERROR = 2,
+}
+
 export interface TransformOpts<T> {
   value: T;
   duration?: number;
   delay?: number;
   easing?: string;
 }
+
 export interface TransformProps {
   scale?: TransformOpts<number> | number;
   color?: TransformOpts<string> | string;

@@ -14,7 +14,7 @@ import { throttle } from '@/util/throttle';
 import { lerp } from '@/util/math';
 import { generateCSSTransform } from '@/util/dom';
 import { hoverState } from '@/directives/hover';
-import { TransformProps, HoverBehavior } from '@/types';
+import { TransformProps, HoverBehavior } from '@/common/types';
 import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from './options';
 
 // button mapping utility
@@ -196,19 +196,19 @@ export default defineComponent({
     });
 
     // determine if the component should render on touch-based devices
-    const showPointer = () => {
+    const showPointer = (): boolean => {
       const isTouchDevice = () => window.matchMedia('(pointer: coarse)').matches;
 
       return !isTouchDevice() || (isTouchDevice() && props.showOnTouch);
     }
 
     // detect if custom shape is preferred instead
-    const isCustomShape = () => {
+    const isCustomShape = (): boolean => {
       return !!slots.default;
     }
 
     // getter for wrapper element
-    const getWrapperElement = () => {
+    const getWrapperElement = (): HTMLElement => {
       return wrapper.value as HTMLElement;
     }
 
@@ -227,7 +227,7 @@ export default defineComponent({
       ref: TransformProps,
       target: TransformProps,
       pickRef: boolean,
-    ) => {
+    ): void => {
       const el = cursor.value as HTMLElement;
 
       const { cssStyles, transitionString } = generateCSSTransform(
@@ -249,7 +249,7 @@ export default defineComponent({
      */
 
     // restore default cursor on mouse out
-    const handleMouseOut = () => {
+    const handleMouseOut = (): void => {
       const el = getWrapperElement();
       document.body.style.cursor = 'auto';
 
@@ -261,7 +261,7 @@ export default defineComponent({
     }
 
     // hide normal cursor on demand
-    const handleMouseOver = () => {
+    const handleMouseOver = (): void => {
       if (!props.showDefaultCursor) {
         document.body.style.cursor = 'none';
       }
@@ -274,7 +274,7 @@ export default defineComponent({
     };
 
     // change mouse position on mouse movements
-    const handleMouseMove = throttle((event: MouseEvent) => {
+    const handleMouseMove = throttle((event: MouseEvent): void => {
       mousePos.x = event.clientX - (props.size / 2);
       mousePos.y = event.clientY - (props.size / 2);
 
@@ -282,7 +282,7 @@ export default defineComponent({
     }, props.throttleSpeed);
 
     // handle linear interpolation if option is enabled
-    const handleLerp = () => {
+    const handleLerp = (): void => {
       const el = getWrapperElement();
 
       // prevent running function on unmounted state
@@ -298,7 +298,7 @@ export default defineComponent({
     }
 
     // apply transformation on mouse button press
-    const handleMouseDown = (event: MouseEvent) => {
+    const handleMouseDown = (event: MouseEvent): void => {
       if (!props.buttonMap.includes(buttonMap.get(event.button))) {
         return;
       }
@@ -323,7 +323,7 @@ export default defineComponent({
     }
 
     // apply another transform on cursor when mouse button is lifted
-    const handleMouseUp = (event: MouseEvent) => {
+    const handleMouseUp = (event: MouseEvent): void => {
       if (!props.buttonMap.includes(buttonMap.get(event.button))) {
         return;
       }
@@ -347,7 +347,7 @@ export default defineComponent({
     }
 
     // handle cursor props on element hover
-    const handleElementIn = (behavior: HoverBehavior) => {
+    const handleElementIn = (behavior: HoverBehavior): void => {
       if (clickState.value) { // prioritize button clicks
         return;
       }
@@ -365,7 +365,7 @@ export default defineComponent({
     }
 
     // handle cursor props when the cursor exits Tetikus-hoverable elements
-    const handleElementOut = (prevBehavior: HoverBehavior) => {
+    const handleElementOut = (prevBehavior: HoverBehavior): void => {
       if (!isCustomShape() && !clickState.value) {
         applyTransform(prevBehavior.transformProps, defaultTransformStyle.value, true);
       }
@@ -374,7 +374,7 @@ export default defineComponent({
     }
 
     // attach event listeners
-    onMounted(() => {
+    onMounted((): void => {
       if (showPointer()) {
         window.addEventListener('mouseout', handleMouseOut);
         window.addEventListener('mouseover', handleMouseOver);
@@ -409,7 +409,7 @@ export default defineComponent({
     });
 
     // watch any hover state changes and pass it to correct handlers
-    watch(hoverState, (state, prevState) => {
+    watch(hoverState, (state, prevState): void => {
       if (!state) {
         handleElementOut(prevState as HoverBehavior);
       } else {

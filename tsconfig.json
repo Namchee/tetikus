@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    "module": "esnext",
+    "module": "commonjs",
+    "declaration": true,
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
@@ -11,6 +12,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "baseUrl": ".",
+    "outDir": "dist",
     "types": [
       "webpack-env",
     ],
@@ -34,6 +36,7 @@
     "tests/**/*.tsx", "src/util/throttle.ts", "src/util/dom.ts",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

@@ -20,7 +20,7 @@
   },
   "scripts": {
     "postuninstall": "npm prune",
-    "build": "vue-cli-service build --target lib --name tetikus --mode production ./src/index.js",
+    "build": "vue-cli-service build --target lib --name tetikus ./src/index.js",
     "build:report": "npm run build -- --report",
     "build:watch": "npm run build -- --watch",
     "lint": "vue-cli-service lint",

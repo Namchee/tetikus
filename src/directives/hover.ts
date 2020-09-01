@@ -1,5 +1,5 @@
 import { DirectiveBinding, ref, Ref, VNode } from 'vue';
-import { HoverBehavior, TransformProps } from '../types';
+import { HoverBehavior, TransformProps } from '@/common/types';
 
 export const hoverState: Ref<HoverBehavior | null> = ref(null);
 

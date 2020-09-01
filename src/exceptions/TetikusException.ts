@@ -1,9 +1,6 @@
 /* eslint-disable no-console */
 
-export enum ExceptionLevel {
-  WARNING = 1,
-  ERROR = 2,
-}
+import { ExceptionLevel } from '@/common/types';
 
 /**
  * Custom exception class for firing any exception that comes

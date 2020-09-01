@@ -1,6 +1,7 @@
-import { TransformProps, CSSStyles, CSSAnimation } from '@/types';
+import { TransformProps, CSSStyles, CSSAnimation } from '@/common/types';
 import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
-import { TetikusException, ExceptionLevel } from '@/exceptions/TetikusException';
+import { TetikusException } from '@/exceptions/TetikusException';
+import { ExceptionLevel } from '@/common/types';
 
 interface CSSMap {
   unit: string;

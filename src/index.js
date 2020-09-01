@@ -25,6 +25,12 @@ export default {
   }
 }
 
-// re-export the component using named export
-// just in case someone want to use it in one component
-export { Tetikus, TetikusHover, defaultTransitionSpeed, defaultEasingFunction, defaultDelay };
+// re-export the components, directives, and options using named export
+// just in case someone hates global installation (:
+export {
+  Tetikus,
+  TetikusHover,
+  defaultTransitionSpeed,
+  defaultEasingFunction,
+  defaultDelay,
+};
