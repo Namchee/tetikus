@@ -42,7 +42,7 @@ export default defineComponent({
     // determine stroke width for default cursor shape
     borderWidth: {
       type: Number,
-      default: 0,
+      default: 2,
     },
 
     // background color for default pointer
