@@ -1,23 +1,94 @@
 # Tetikus
 
+[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) ![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg)
+
 Tetikus is a custom cursor component made for Vue 3.
 
 > ⚠️ WARNING: This component **DOES NOT WORK** with Vue 2! Consider upgrading to Vue 3 as it's really close from being released.
 
 ## Features
 
-- Easily customizable, you're not locked with basic circle shape!
+- Easily customizable, you're not locked with basic circle shape and most
+events are fired
 - Relatively performant
-- Relatively small (6KB gzipped)
+- Relatively small, the UMD build is only 6KB gzipped 📦
+- Made with Typescript, no more guessing games
 - Depends on nothing, all features are implemented with pure CSS, JS, and Vue ✌️.
 
 ## Installation
 
 TODO
 
-## Documentation
+## Props
 
-TODO
+Prop Name | Type |Default| Description
+--------- | ---- | ------|-----------
+`showDefaultCursor` | `boolean` | `false` | Determines if the native should be shown alongside `tetikus` component. Useful for accessability purposes.
+`throttleSpeed` | `number` (integer) | 1 | Number of `mousemove` event that should be fired per 1000 milliseconds. The higher the number, the choppier the cursor movement will be.
+`borderWidth` | `number` (px) | 2 | Border width of default cursor shape in pixels.
+`color` | `string` | `transparent` | Background color of default cursor shape. Accept any CSS color value.
+`borderColor` | `string` | `#121212` | Border color of default cursor shape. Accept any CSS color value.
+`size` | `number` (px) | 36 | Size of default cursor shape in pixels
+`invertColor` | `boolean` | `false` | Determines if the default cursor shape should apply `mix-blend-mode: difference`
+`buttonMap` | `Array` | `['left']` | List of mouse button that should trigger `tetikus-mouse-down` event. Possible values are `left`, `right`, `middle`
+`clickBehavior` | `TransformProps` | `{}` | Determines transforms that should be applied to default cursor when a click event is registered
+`showOnTouch` | `boolean` | `false` | Determines if the cursor should be shown on 'touch'-devices. ⚠️ __Unless you know what are you doing, leave this on `false`__ ⚠️
+`opacity` | `number` (between 0.0 - 1.0) | 1 | Opacity of default cursor.
+`hideOnOut` | `boolean` | `false` | Determines if the custom cursor should be hidden when the cursor leaves the viewport
+`contentPosition` | `string` | `center` | Determines the position of `contents` slot relative to the cursor. Possible values are `center`, `bottom`, `right`
+`lerp` | `number` | `1` | [Linear Interpolation Value](https://codepen.io/ma77os/pen/KGIEh)
+
+## Slots
+
+Name | Description
+---- | -----------
+(default slot) | Determines the cursor shape to be used. ⚠️ __Currently, using this slot will render any previously defined behaviors invalid. Any transition MUST be handler by yours truly__ ⚠️
+`contents` | Content to be displayed with the cursor
+
+## Events
+
+Name | Description
+---- | -----------
+`tetikus-window-leave` | Fired when the cursor leaves the viewport
+`tetikus-window-enter` | Fired when the cursor enters the viewport
+`tetikus-mouse-move` | Fired when the cursor moves on the viewport
+`tetikus-mouse-down` | Fired when any previously registered mouse buttons are clicked by the user
+`tetikus-mouse-up` | Fired when any previously registered mouse buttons are lifted
+`tetikus-element-in` | Fired when the cursor hovers over any element that has `tetikus` hover directives
+`tetikus-element-out` | Fired when the cursor exits from the bounding box of any element that has `tetikus` hover directives
+
+## Directives
+
+Name | Value | Description
+---- | ----- | -----------
+`thover` (can be customized from options) | `TransformProps` | Determines transform to be applied when the cursor hovers this element
+
+## Component Options
+
+These values will set default values for `tetikus` component
+
+Name | Type |Default| Description
+--------- | ---- | ------|-----------
+`directiveName` | `string` | `thover` | Name for the hover directive.
+`transitionSpeed` | `number` (ms) | 200 | Animation speed for CSS transition.
+`easing` | `string` | `ease-out` | Easing function for CSS transition. Accept anything than can be represented using `cubic-bezier`
+`delay` | `number` (ms) | 0 | Delay for CSS transition.
+
+## Objects
+
+Name | Property | Type | Description
+---- | -------- | ---- | -----------
+`TransformOpts` | `value` | `T` | Value for the transformation.
+&nbsp; | `duration` (optional) | `number` (ms) | Transition duration. If the value is omitted, default value will be used
+&nbsp; | `delay` (optional) | `number` (ms) | Delay for CSS transition.
+&nbsp; | `easing` (optional) | `string` | Easing function for CSS transition. Accept anything than can be represented using `cubic-bezier`
+`TransformProps` | `scale` (optional) | `TransformOpts<number>`, `number` | Determines the scale of cursor to be applied on transition.
+&nbsp; | `color` (optional) | `TransformOpts<string>`, `string` | Determines the background color of cursor to be applied on transition.
+&nbsp; | `borderWidth` (optional) | `TransformOpts<number>`, `number` | Determines the border width of cursor to be applied on transition.
+&nbsp; | `borderColor` (optional) | `TransformOpts<string>`, `string` | Determines the border color of cursor to be applied on transition. Accepts any CSS color string.
+&nbsp; | `opacity` (optional) | `TransformOpts<number>`, `number` (between 0.0 - 1.0) | Determines the opacity of cursor to be applied on transition.
+
+> Note: When any property of `TransformProps` is defined without `TransformOpts`, the transition settings (duration, easing, delay) for that property will be applied with default values.
 
 ## Development
 

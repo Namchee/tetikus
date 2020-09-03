@@ -3,6 +3,13 @@ export enum ExceptionLevel {
   ERROR = 2,
 }
 
+export interface TetikusOptions {
+  directiveName?: string;
+  transitionSpeed?: number;
+  easing?: string;
+  delay?: number;
+}
+
 export interface TransformOpts<T> {
   value: T;
   duration?: number;

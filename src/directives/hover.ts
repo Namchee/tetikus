@@ -10,7 +10,7 @@ const updateHoverState = (props: TransformProps, vnode: VNode) => {
   };
 
   hoverState.value = state;
-}
+};
 
 const clearHoverState = () => {
   hoverState.value = null;

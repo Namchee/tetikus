@@ -1,5 +1,9 @@
 import { TransformProps, CSSStyles, CSSAnimation } from '@/common/types';
-import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from '@/components/Tetikus/options';
+import {
+  defaultTransitionSpeed,
+  defaultEasingFunction,
+  defaultDelay,
+} from '@/components/Tetikus/options';
 import { TetikusException } from '@/exceptions/TetikusException';
 import { ExceptionLevel } from '@/common/types';
 
@@ -17,8 +21,8 @@ const keyMap: Map<string, CSSMap> = new Map([
       unit: '',
       calc: (value: string | number) => {
         return `scale(${value})`;
-      }
-    }
+      },
+    },
   ],
   [
     'color',
@@ -62,6 +66,7 @@ function generateTransitionString(
 ): string {
   const duration = `${props[key]?.duration || defaultTransitionSpeed.value}ms`;
   const easingFunc = props[key]?.easing || defaultEasingFunction.value;
+  /* eslint-disable-next-line */
   const delay = `${props[key]?.delay !== undefined ? props[key].delay : defaultDelay.value}ms`;
 
   return `${cssProp} ${duration} ${easingFunc} ${delay}`;
@@ -72,8 +77,8 @@ function generateTransitionString(
  *
  * @param {TransformProps} ref Reference property
  * @param {TransformProps} props Desired transformation property
- * @param {boolean} pickRef Indicates if any missing transition properties should
- * be referenced from source or not
+ * @param {boolean} pickRef Indicates if any missing transition properties
+ * should be referenced from source or not
  * @returns CSS-compatible transition properties and options
  */
 export function generateCSSTransform(
@@ -88,7 +93,11 @@ export function generateCSSTransform(
     const cssMap = keyMap.get(key);
 
     if (!cssMap) {
-      new TetikusException(`Unregistered property transformation ${key}. Transformation property will be ignored`, ExceptionLevel.WARNING);
+      new TetikusException(
+        /* eslint-disable-next-line */
+        `Unregistered property transformation ${key}. Transformation property will be ignored`,
+        ExceptionLevel.WARNING,
+      );
       continue;
     }
 

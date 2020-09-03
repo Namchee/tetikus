@@ -15,7 +15,11 @@ import { lerp } from '@/util/math';
 import { generateCSSTransform } from '@/util/dom';
 import { hoverState } from '@/directives/hover';
 import { TransformProps, HoverBehavior } from '@/common/types';
-import { defaultTransitionSpeed, defaultEasingFunction, defaultDelay } from './options';
+import {
+  defaultTransitionSpeed,
+  defaultEasingFunction,
+  defaultDelay,
+} from './options';
 
 // button mapping utility
 const buttonMap: Map<number, string> = new Map([
@@ -33,7 +37,8 @@ export default defineComponent({
     },
 
     // determine throttle speed, a.k.a number of events that should be fired
-    // Per 1000 milliseconds, mouse events will be fired (1000 / throttleSpeed) time(s)
+    // Per 1000 milliseconds, mouse events will be fired
+    // (1000 / throttleSpeed) time(s)
     throttleSpeed: {
       type: Number,
       default: 1,
@@ -75,8 +80,8 @@ export default defineComponent({
       type: Array,
       default: () => ['left'],
       validator: (val: Array<string>) => {
-        return val.every(v => ['left', 'middle', 'right'].includes(v));
-      }
+        return val.every((v) => ['left', 'middle', 'right'].includes(v));
+      },
     },
 
     // control pointer size on mouse up-down events
@@ -97,10 +102,11 @@ export default defineComponent({
       default: 1,
       validator: (value: number) => {
         return value >= 0 && value <= 1;
-      }
+      },
     },
 
-    // determines if the cursor should be hidden when the cursor position is outside the window
+    // determines if the cursor should be hidden when the cursor position
+    // is outside the window
     hideOnOut: {
       type: Boolean,
       default: false,
@@ -119,20 +125,22 @@ export default defineComponent({
       default: 1,
     },
 
-    // determine default transition speed when property is not supplied on behavior
+    // determine default transition speed when property is not supplied
+    // on behavior
     defaultTransitionSpeed: {
       type: Number,
       default: defaultTransitionSpeed.value,
     },
 
-    // determine default easing function when property is not supplied on behavior
-    // must be CSS-compatible easing function
+    // determine default easing function when property is not supplied
+    // on behavior. Must be CSS-compatible easing function
     defaultEasing: {
       type: String,
       default: defaultEasingFunction.value,
     },
 
-    // determine default delay duration when property is not supplied on behavior
+    // determine default delay duration when property is not supplied
+    // on behavior
     defaultDelay: {
       type: Number,
       default: defaultDelay.value,
@@ -197,20 +205,22 @@ export default defineComponent({
 
     // determine if the component should render on touch-based devices
     const showPointer = (): boolean => {
-      const isTouchDevice = () => window.matchMedia('(pointer: coarse)').matches;
+      const isTouchDevice = () => {
+        return window.matchMedia('(pointer: coarse)').matches;
+      };
 
       return !isTouchDevice() || (isTouchDevice() && props.showOnTouch);
-    }
+    };
 
     // detect if custom shape is preferred instead
     const isCustomShape = (): boolean => {
       return !!slots.default;
-    }
+    };
 
     // getter for wrapper element
     const getWrapperElement = (): HTMLElement => {
       return wrapper.value as HTMLElement;
-    }
+    };
 
     // default cursor styling
     const defaultTransformStyle = computed(() => {
@@ -234,14 +244,14 @@ export default defineComponent({
         ref,
         target,
         pickRef,
-      )
+      );
 
       Object.keys(cssStyles).forEach((prop: string) => {
         el.style[prop] = cssStyles[prop];
       });
 
       el.style.transition = transitionString;
-    }
+    };
 
     /**
      * Begin event listeners part
@@ -258,7 +268,7 @@ export default defineComponent({
       }
 
       emit('tetikus-window-leave');
-    }
+    };
 
     // hide normal cursor on demand
     const handleMouseOver = (): void => {
@@ -295,7 +305,7 @@ export default defineComponent({
       }
 
       requestAnimationFrame(handleLerp);
-    }
+    };
 
     // apply transformation on mouse button press
     const handleMouseDown = (event: MouseEvent): void => {
@@ -320,7 +330,7 @@ export default defineComponent({
       clickState.value = true;
 
       emit('tetikus-mouse-down', event);
-    }
+    };
 
     // apply another transform on cursor when mouse button is lifted
     const handleMouseUp = (event: MouseEvent): void => {
@@ -344,7 +354,7 @@ export default defineComponent({
       clickState.value = false;
 
       emit('tetikus-mouse-up', event);
-    }
+    };
 
     // handle cursor props on element hover
     const handleElementIn = (behavior: HoverBehavior): void => {
@@ -362,16 +372,20 @@ export default defineComponent({
       }
 
       emit('tetikus-element-in', behavior);
-    }
+    };
 
     // handle cursor props when the cursor exits Tetikus-hoverable elements
     const handleElementOut = (prevBehavior: HoverBehavior): void => {
       if (!isCustomShape() && !clickState.value) {
-        applyTransform(prevBehavior.transformProps, defaultTransformStyle.value, true);
+        applyTransform(
+          prevBehavior.transformProps,
+          defaultTransformStyle.value,
+          true,
+        );
       }
 
       emit('tetikus-element-out');
-    }
+    };
 
     // attach event listeners
     onMounted((): void => {

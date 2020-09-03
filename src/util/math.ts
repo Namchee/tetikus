@@ -27,7 +27,11 @@ function parseCSSVars(val: number | string): number {
  * @param {number} amt Interpolation multiplier
  * @returns Interpolated position
  */
-export function lerp(start: number | string, end: number | string, amt: number): number {
+export function lerp(
+  start: number | string,
+  end: number | string,
+  amt: number,
+): number {
   const parsedStart: number = parseCSSVars(start);
   const parsedEnd: number = parseCSSVars(end);
 

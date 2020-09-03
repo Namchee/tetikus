@@ -2,42 +2,36 @@
   "name": "tetikus",
   "version": "0.1.0",
   "description": "A custom cursor component for Vue 3 ✌️",
-  "main": "index.js",
-  "keywords": [
-    "javascript",
-    "vuejs",
-    "vuejs3",
-    "custom-cursor"
-  ],
-  "homepage": "https://github.com/Namchee/tetikus",
   "author": {
     "name": "Cristopher Namchee",
     "email": "cristophernamchee12@gmail.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Namchee/tetikus.git"
-  },
   "scripts": {
-    "postuninstall": "npm prune",
-    "build": "vue-cli-service build --target lib --name tetikus ./src/index.js",
+    "build": "vue-cli-service build --target lib --name tetikus ./src/index.ts",
+    "lint": "vue-cli-service lint",
     "build:report": "npm run build -- --report",
     "build:watch": "npm run build -- --watch",
-    "lint": "vue-cli-service lint",
+    "postuninstall": "npm prune",
     "test": "ava"
   },
+  "main": "dist/tetikus.umd.js",
+  "files": [
+    "dist/*",
+    "src/*"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "@vue/cli-plugin-typescript": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
+    "@vue/cli-plugin-babel": "^4.5.4",
+    "@vue/cli-plugin-eslint": "^4.5.4",
+    "@vue/cli-plugin-typescript": "^4.5.4",
+    "@vue/cli-service": "^4.5.4",
     "@vue/compiler-sfc": "^3.0.0-beta.1",
     "@vue/eslint-config-typescript": "^5.0.2",
     "ava": "^3.12.1",
     "core-js": "^3.6.5",
     "eslint": "^6.7.2",
+    "eslint-config-google": "^0.14.0",
     "eslint-plugin-vue": "^7.0.0-alpha.0",
     "esm": "^3.2.25",
     "precss": "^4.0.0",
@@ -45,13 +39,8 @@
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "~3.9.3",
-    "vue": "^3.0.0-beta.1",
-    "vue-cli-plugin-vue-next": "~0.1.3"
+    "vue": "^3.0.0-beta.1"
   },
-  "files": [
-    "dist/*",
-    "src/*"
-  ],
   "ava": {
     "files": [
       "src/**/*.test.ts"
@@ -65,5 +54,16 @@
       "tsconfig-paths/register"
     ],
     "verbose": true
+  },
+  "homepage": "https://github.com/Namchee/tetikus",
+  "keywords": [
+    "javascript",
+    "vuejs",
+    "vuejs3",
+    "custom-cursor"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Namchee/tetikus.git"
   }
 }
