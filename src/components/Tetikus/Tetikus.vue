@@ -362,7 +362,7 @@ export default defineComponent({
         return;
       }
 
-      if (!behavior.custom && !isCustomShape()) {
+      if (!isCustomShape()) {
         const transformTarget = {
           ...defaultTransformStyle.value,
           ...behavior.transformProps,

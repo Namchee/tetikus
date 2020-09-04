@@ -11,7 +11,7 @@ import { App } from 'vue';
 export default {
   install(
     app: App,
-    { directiveName, transitionSpeed, easing, delay }: TetikusOptions,
+    { directiveName, transitionSpeed, easing, delay }: TetikusOptions = {},
   ) {
     app.component('Tetikus', Tetikus);
     app.directive(directiveName || 'thover', TetikusHover);
@@ -29,6 +29,7 @@ export default {
     }
   },
 };
+
 
 // re-export the components, directives, and options using named export
 // just in case someone hates global installation (:

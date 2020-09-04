@@ -37,5 +37,4 @@ export interface CSSAnimation {
 export interface HoverBehavior {
   domElement: HTMLElement;
   transformProps: TransformProps;
-  custom?: boolean;
 }

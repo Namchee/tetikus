@@ -14,7 +14,7 @@
     "postuninstall": "npm prune",
     "test": "ava"
   },
-  "main": "dist/tetikus.umd.js",
+  "main": "dist/tetikus.common.js",
   "files": [
     "dist/*",
     "src/*"
@@ -35,8 +35,6 @@
     "eslint-plugin-vue": "^7.0.0-alpha.0",
     "esm": "^3.2.25",
     "precss": "^4.0.0",
-    "rollup-plugin-css-only": "^2.1.0",
-    "rollup-plugin-vue": "^6.0.0-beta.10",
     "sinon": "^9.0.3",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
