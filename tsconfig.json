@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
+    "target": "esnext",
+    "module": "esnext",
     "declaration": true,
     "strict": true,
     "jsx": "preserve",
@@ -10,9 +10,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
-    "sourceMap": true,
+    "sourceMap": false,
     "baseUrl": ".",
     "outDir": "dist",
+    "rootDir": "src",
     "types": [
       "webpack-env",
     ],
@@ -33,7 +34,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx", "src/util/throttle.ts", "src/util/dom.ts",
+    "tests/**/*.tsx",
   ],
   "exclude": [
     "node_modules",
