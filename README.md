@@ -19,6 +19,32 @@ events are fired
 
 TODO
 
+## Usage
+
+Just use the component in your root file.
+You can use the directives on any element in your app.
+
+```js
+// Root.vue
+<template>
+  <div>
+    <tetikus />
+  </div>
+</template>
+
+// ...rest of your code
+
+// Somewhere.vue
+<template>
+  <div v-thover="{ scale: 0.8 }">
+    // ...
+  </div>
+</template>
+
+// If you're not using the global installation method,
+// make sure to install the components and directives correctly
+```
+
 ## Props
 
 Prop Name | Type |Default| Description
@@ -42,20 +68,20 @@ Prop Name | Type |Default| Description
 
 Name | Description
 ---- | -----------
-(default slot) | Determines the cursor shape to be used. ⚠️ __Currently, using this slot will render any previously defined behaviors invalid. Any transition MUST be handler by yours truly__ ⚠️
+(default slot) | Determines the cursor shape to be used. ⚠️ __Currently, using this slot will render any previously defined behaviors invalid. Any transition MUST be handled by yours truly__ ⚠️
 `contents` | Content to be displayed with the cursor
 
 ## Events
 
-Name | Description
----- | -----------
-`tetikus-window-leave` | Fired when the cursor leaves the viewport
-`tetikus-window-enter` | Fired when the cursor enters the viewport
-`tetikus-mouse-move` | Fired when the cursor moves on the viewport
-`tetikus-mouse-down` | Fired when any previously registered mouse buttons are clicked by the user
-`tetikus-mouse-up` | Fired when any previously registered mouse buttons are lifted
-`tetikus-element-in` | Fired when the cursor hovers over any element that has `tetikus` hover directives
-`tetikus-element-out` | Fired when the cursor exits from the bounding box of any element that has `tetikus` hover directives
+Name | Params | Description
+---- | ------ | -----------
+`tetikus-window-leave` | &nbsp; | Fired when the cursor leaves the viewport
+`tetikus-window-enter` | &nbsp; | Fired when the cursor enters the viewport
+`tetikus-mouse-move` | `(event: MouseEvent)` | Fired when the cursor moves on the viewport
+`tetikus-mouse-down` | `(event: MouseEvent)` | Fired when any previously registered mouse buttons are clicked by the user
+`tetikus-mouse-up` | `(event: MouseEvent)` | Fired when any previously registered mouse buttons are lifted
+`tetikus-element-in` | `(behavior: HoverBehavior)` | Fired when the cursor hovers over any element that has `tetikus` hover directives
+`tetikus-element-out` | `(behavior: HoverBehavior)` |Fired when the cursor exits from the bounding box of any element that has `tetikus` hover directives
 
 ## Directives
 
@@ -87,6 +113,8 @@ Name | Property | Type | Description
 &nbsp; | `borderWidth` (optional) | `TransformOpts<number>`, `number` | Determines the border width of cursor to be applied on transition.
 &nbsp; | `borderColor` (optional) | `TransformOpts<string>`, `string` | Determines the border color of cursor to be applied on transition. Accepts any CSS color string.
 &nbsp; | `opacity` (optional) | `TransformOpts<number>`, `number` (between 0.0 - 1.0) | Determines the opacity of cursor to be applied on transition.
+`HoverBehavior` | `domElement` | `HTMLElement` | The HTML element that triggers `tetikus-element-in` and `tetikus-element-out` events.
+&nbsp; | `transformProps` | `TransformProps` | Transformation to be applied on the cursor element.
 
 > Note: When any property of `TransformProps` is defined without `TransformOpts`, the transition settings (duration, easing, delay) for that property will be applied with default values.
 
