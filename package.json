@@ -50,6 +50,10 @@
     ],
     "verbose": true
   },
+  "files": [
+    "src/**/*",
+    "dist/**/*"
+  ],
   "homepage": "https://github.com/Namchee/tetikus",
   "keywords": [
     "javascript",
