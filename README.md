@@ -1,6 +1,6 @@
 # Tetikus
 
-[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) ![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg)
+[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) ![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg) ![NPM Package Version](https://img.shields.io/npm/v/@namchee/tetikus) ![Bundle Size](https://img.shields.io/bundlephobia/minzip/@namchee/tetikus)
 
 Tetikus is a custom cursor component made for Vue 3.
 
@@ -11,13 +11,28 @@ Tetikus is a custom cursor component made for Vue 3.
 - Easily customizable, you're not locked with basic circle shape and most
 events are fired
 - Relatively performant
-- Relatively small, the UMD build is only 6KB gzipped 📦
+- Relatively small, the minified build is only 6.3KB gzipped 📦
 - Made with Typescript, no more guessing games
 - Depends on nothing, all features are implemented with pure CSS, JS, and Vue ✌️.
 
 ## Installation
 
-TODO
+Simply execute this script from your terminal
+
+`npm install @namchee/tetikus --save`
+
+After that, you can add it to your Vue 3 application by using the `.use()` like:
+
+```js
+import { createApp } from 'vue';
+import Root from './Root.vue';
+import Tetikus from '@namchee/tetikus';
+
+const app = createApp(Root);
+app.use(Tetikus);
+```
+
+> Note: If you are using an ES Modules based dev server, the bundler won't find the `install` method. Instead, use `app.use(Tetikus.default)` as temporary leverage.
 
 ## Usage
 
