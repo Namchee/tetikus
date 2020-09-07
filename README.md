@@ -1,6 +1,6 @@
 # Tetikus
 
-[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) ![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg) ![NPM Package Version](https://img.shields.io/npm/v/@namchee/tetikus) ![Bundle Size](https://img.shields.io/bundlephobia/minzip/@namchee/tetikus)
+[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) [![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg)](https://github.com/vuejs/vue-next) [![NPM Package Version](https://img.shields.io/npm/v/@namchee/tetikus)](https://www.npmjs.com/package/@namchee/tetikus) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@namchee/tetikus)](https://bundlephobia.com/result?p=@namchee/tetikus@0.1.0)
 
 Tetikus is a custom cursor component made for Vue 3.
 
