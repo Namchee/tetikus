@@ -11,30 +11,38 @@
     "lint": "vue-cli-service lint",
     "build:report": "npm run build -- --report",
     "build:watch": "npm run build -- --watch",
+    "build:bili": "rm -rf dist/ && bili src/index.ts",
     "postuninstall": "npm prune",
     "test": "ava"
   },
   "main": "dist/tetikus.common.js",
+  "unpkg": "dist/tetikus.umd.min.js",
+  "cdn": "dist/tetikus.umd.min.js",
   "devDependencies": {
+    "@babel/preset-env": "^7.11.5",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "^4.5.4",
     "@vue/cli-plugin-eslint": "^4.5.4",
     "@vue/cli-plugin-typescript": "^4.5.4",
     "@vue/cli-service": "^4.5.4",
-    "@vue/compiler-sfc": "^3.0.0-beta.1",
+    "@vue/compiler-sfc": "^3.0.0-rc.10",
     "@vue/eslint-config-typescript": "^5.0.2",
     "ava": "^3.12.1",
+    "bili": "^5.0.5",
     "core-js": "^3.6.5",
     "eslint": "^6.7.2",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-vue": "^7.0.0-alpha.0",
     "esm": "^3.2.25",
+    "rimraf": "^3.0.2",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "rollup-plugin-vue": "^6.0.0-beta.10",
     "sinon": "^9.0.3",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "~3.9.3",
-    "vue": "^3.0.0-beta.1"
+    "vue": "^3.0.0-rc.10"
   },
   "ava": {
     "files": [
@@ -51,8 +59,8 @@
     "verbose": true
   },
   "files": [
-    "src/**/*",
-    "dist/**/*"
+    "src/*",
+    "dist/*"
   ],
   "homepage": "https://github.com/Namchee/tetikus",
   "keywords": [
