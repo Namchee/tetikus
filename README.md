@@ -29,6 +29,7 @@ After that, you can add it to your Vue 3 application by using the `.use()` like:
 import { createApp } from 'vue';
 import Root from './Root.vue';
 import Tetikus from '@namchee/tetikus';
+import '@namchee/tetikus/dist/tetikus.css';
 
 const app = createApp(Root);
 app.use(Tetikus);
