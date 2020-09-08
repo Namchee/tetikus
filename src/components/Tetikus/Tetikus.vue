@@ -478,25 +478,25 @@ export default defineComponent({
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
 .tetikus {
   pointer-events: none;
   position: fixed;
   z-index: 999;
   display: flex;
+}
 
-  &.tetikus--leave {
-    display: none;
-  }
+.tetikus--leave {
+  display: none;
+}
 
-  & .tetikus__cursor {
-    box-sizing: border-box;
-  }
+.tetikus__cursor {
+  box-sizing: border-box;
+}
 
-  & .tetikus__default__cursor {
-    border-radius: 9999px;
-    transition: transform 150ms ease-in-out;
-    transform: scale(1);
-  }
+.tetikus__default__cursor {
+  border-radius: 9999px;
+  transition: transform 150ms ease-in-out;
+  transform: scale(1);
 }
 </style>
