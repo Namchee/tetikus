@@ -35,8 +35,6 @@ const app = createApp(Root);
 app.use(Tetikus);
 ```
 
-> Note: If you are using an ES Modules based dev server, the bundler won't find the `install` method. Instead, use `app.use(Tetikus.default)` as temporary leverage.
-
 ## Usage
 
 Just use the component in your root file.
