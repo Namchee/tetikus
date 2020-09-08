@@ -1,6 +1,6 @@
 # Tetikus
 
-[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) [![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg)](https://github.com/vuejs/vue-next) [![NPM Package Version](https://img.shields.io/npm/v/@namchee/tetikus)](https://www.npmjs.com/package/@namchee/tetikus) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@namchee/tetikus)](https://bundlephobia.com/result?p=@namchee/tetikus@0.1.0)
+[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) [![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg)](https://github.com/vuejs/vue-next) [![NPM Package Version](https://img.shields.io/npm/v/@namchee/tetikus)](https://www.npmjs.com/package/@namchee/tetikus) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@namchee/tetikus)](https://bundlephobia.com/result?p=@namchee/tetikus@0.2.0)
 
 Tetikus is a custom cursor component made for Vue 3.
 
@@ -29,12 +29,11 @@ After that, you can add it to your Vue 3 application by using the `.use()` like:
 import { createApp } from 'vue';
 import Root from './Root.vue';
 import Tetikus from '@namchee/tetikus';
+import '@namchee/tetikus/dist/tetikus.css';
 
 const app = createApp(Root);
 app.use(Tetikus);
 ```
-
-> Note: If you are using an ES Modules based dev server, the bundler won't find the `install` method. Instead, use `app.use(Tetikus.default)` as temporary leverage.
 
 ## Usage
 
