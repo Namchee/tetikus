@@ -1,7 +1,7 @@
 import test from 'ava';
 import { stub } from 'sinon';
 import { lerp } from './math';
-import { TetikusException } from '@/exceptions/TetikusException';
+import { TetikusException } from './../exceptions/TetikusException';
 
 test('should return correct result', (t) => {
   const result = lerp(20, 80, 0.5);

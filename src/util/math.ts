@@ -1,4 +1,4 @@
-import { TetikusException } from '@/exceptions/TetikusException';
+import { TetikusException } from './../exceptions/TetikusException';
 
 // utility function to convert CSS computed values to px
 function parseCSSVars(val: number | string): number {

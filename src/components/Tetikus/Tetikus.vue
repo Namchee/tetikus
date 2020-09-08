@@ -10,11 +10,11 @@ import {
   watch,
 } from 'vue';
 
-import { throttle } from '@/util/throttle';
-import { lerp } from '@/util/math';
-import { generateCSSTransform } from '@/util/dom';
-import { hoverState } from '@/directives/hover';
-import { TransformProps, HoverBehavior } from '@/common/types';
+import { throttle } from './../../util/throttle';
+import { lerp } from './../../util/math';
+import { generateCSSTransform } from './../../util/dom';
+import { hoverState } from './../../directives/hover';
+import { TransformProps, HoverBehavior } from './../../common/types';
 import {
   defaultTransitionSpeed,
   defaultEasingFunction,
