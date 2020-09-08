@@ -1,7 +1,7 @@
 import test from 'ava';
 import { stub } from 'sinon';
 import { generateCSSTransform } from './dom';
-import { CSSAnimation, TransformProps } from '@/common/types';
+import { CSSAnimation, TransformProps } from './../common/types';
 
 test('should generate CSS transform correctly', (t) => {
   const transformRef = {

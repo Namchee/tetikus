@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { ExceptionLevel } from '@/common/types';
+import { ExceptionLevel } from './../common/types';
 
 /**
  * Custom exception class for firing any exception that comes

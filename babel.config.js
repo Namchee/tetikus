@@ -6,5 +6,6 @@ module.exports = {
         useBuiltIns: false,
       },
     ],
+    '@babel/preset-typescript',
   ],
 };

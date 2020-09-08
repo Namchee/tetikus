@@ -10,11 +10,11 @@ import {
   watch,
 } from 'vue';
 
-import { throttle } from '@/util/throttle';
-import { lerp } from '@/util/math';
-import { generateCSSTransform } from '@/util/dom';
-import { hoverState } from '@/directives/hover';
-import { TransformProps, HoverBehavior } from '@/common/types';
+import { throttle } from './../../util/throttle';
+import { lerp } from './../../util/math';
+import { generateCSSTransform } from './../../util/dom';
+import { hoverState } from './../../directives/hover';
+import { TransformProps, HoverBehavior } from './../../common/types';
 import {
   defaultTransitionSpeed,
   defaultEasingFunction,
@@ -478,25 +478,25 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
 .tetikus {
   pointer-events: none;
   position: fixed;
   z-index: 999;
   display: flex;
-}
 
-.tetikus--leave {
-  display: none;
-}
+  &.tetikus--leave {
+    display: none;
+  }
 
-.tetikus__cursor {
-  box-sizing: border-box;
-}
+  & .tetikus__cursor {
+    box-sizing: border-box;
+  }
 
-.tetikus__default__cursor {
-  border-radius: 9999px;
-  transition: transform 150ms ease-in-out;
-  transform: scale(1);
+  & .tetikus__default__cursor {
+    border-radius: 9999px;
+    transition: transform 150ms ease-in-out;
+    transform: scale(1);
+  }
 }
 </style>

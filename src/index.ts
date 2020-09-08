@@ -1,10 +1,10 @@
-import Tetikus from '@/components/Tetikus';
-import { TetikusHover } from '@/directives/hover';
+import Tetikus from './components/Tetikus';
+import { TetikusHover } from './directives/hover';
 import {
   defaultTransitionSpeed,
   defaultEasingFunction,
   defaultDelay,
-} from '@/components/Tetikus/options';
+} from './components/Tetikus/options';
 import { TetikusOptions } from './common/types';
 import { App } from 'vue';
 
