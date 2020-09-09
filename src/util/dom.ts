@@ -66,8 +66,7 @@ function generateTransitionString(
 ): string {
   const duration = `${props[key]?.duration || defaultTransitionSpeed.value}ms`;
   const easingFunc = props[key]?.easing || defaultEasingFunction.value;
-  /* eslint-disable-next-line */
-  const delay = `${props[key]?.delay !== undefined ? props[key].delay : defaultDelay.value}ms`;
+  const delay = `${props[key]?.delay || defaultDelay.value}ms`;
 
   return `${cssProp} ${duration} ${easingFunc} ${delay}`;
 }

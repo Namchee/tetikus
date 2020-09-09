@@ -4,7 +4,7 @@
   "description": "A custom cursor component for Vue 3 ✌️",
   "author": "Cristopher Namchee <cristophernamchee12@gmail.com>",
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint src/**/*",
     "build": "rm -rf dist/ && rollup -c",
     "build:watch": "npm run build -- --watch",
     "build:verbose": "npm run build -- --verbose",
@@ -52,12 +52,17 @@
     "extensions": [
       "ts"
     ],
+    "nodeArguments": [
+      "--harmony",
+      "--experimental-modules"
+    ],
     "require": [
       "esm",
       "ts-node/register",
       "tsconfig-paths/register"
     ],
-    "verbose": true
+    "verbose": true,
+    "timeout": "10m"
   },
   "files": [
     "src",

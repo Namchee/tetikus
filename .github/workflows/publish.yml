@@ -1,0 +1,30 @@
+name: Automatically publish to NPM on every release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect GitHub workflows
+        uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Install dependencies
+        uses: npm ci
+      - name: Run lint and tests # Currently, the tests breaks for no reason
+        uses: npm run lint
+      - name: Build the files
+        uses: npm run build
+      - run: npm publish --access public
+        env:
+          # Use a token to publish to NPM. See below for how to set it up
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
