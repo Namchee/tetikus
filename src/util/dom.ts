@@ -65,11 +65,10 @@ function generateTransitionString(
   key: string,
 ): string {
   const duration = `${props[key]?.duration || defaultTransitionSpeed.value}ms`;
-  const easingFunc = props[key]?.easing || defaultEasingFunction.value;
-  /* eslint-disable-next-line */
-  const delay = `${props[key]?.delay !== undefined ? props[key].delay : defaultDelay.value}ms`;
+  const easing = props[key]?.easing || defaultEasingFunction.value;
+  const delay = `${props[key]?.delay || defaultDelay.value}ms`;
 
-  return `${cssProp} ${duration} ${easingFunc} ${delay}`;
+  return `${cssProp} ${duration} ${easing} ${delay}`;
 }
 
 /**
