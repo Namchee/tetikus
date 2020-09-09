@@ -2,19 +2,39 @@
 
 [![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts) [![Vue 3](https://img.shields.io/badge/vue-3.x-brightgreen.svg)](https://github.com/vuejs/vue-next) [![NPM Package Version](https://img.shields.io/npm/v/@namchee/tetikus)](https://www.npmjs.com/package/@namchee/tetikus) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@namchee/tetikus)](https://bundlephobia.com/result?p=@namchee/tetikus@0.2.0)
 
-Tetikus is a custom cursor component made for Vue 3.
+Tetikus is a custom cursor component made for Vue 3 🖱️.
 
-> ⚠️ WARNING: This component **DOES NOT WORK** with Vue 2! Consider upgrading to Vue 3 as it's really close from being released.
+> ⚠️ **WARNING**: This component **DOES NOT WORK** with Vue 2! Consider upgrading to Vue 3 as it's really close from being released.
 
-> ⚠️ WARNING: This library **DOES NOT** work on older browsers that doesn't support `esnext`, the reason is stated [here](https://github.com/vuejs/vue-next)
+> ⚠️ **WARNING**: This library **DOES NOT** work on older browsers that doesn't support `esnext`, the reason is stated [here](https://github.com/vuejs/vue-next)
+
+## Languages
+
+This documentation is also available on:
+
+- [🇮🇩 - Indonesian](./README-ID.md)
+
+## Table of Contents
+
+- [Features](#Features)
+- [Installation](#Installation)
+- [Usage](#Usage)
+- [Props](#Props)
+- [Slots](#Slots)
+- [Events](#Events)
+- [Directives](#Directives)
+- [Options](#Component-Options)
+- [Objects](#Objects)
+- [Development](#Development)
+- [License](#License)
 
 ## Features
 
 - Easily customizable, you're not locked with basic circle shape and most
-events are fired
-- Relatively performant
+events are emitted properly
+- Relatively performant, uses native browser technologies
 - Relatively small, the minified build is only 6.3KB gzipped 📦
-- Made with Typescript, no more guessing games
+- Made with [Typescript](https://www.typescriptlang.org/), no more guessing games 🤔
 - Depends on nothing, all features are implemented with pure CSS, JS, and Vue ✌️.
 
 ## Installation
@@ -63,10 +83,10 @@ You can use the directives on any element in your app.
 
 ## Props
 
-Prop Name | Type |Default| Description
---------- | ---- | ------|-----------
-`showDefaultCursor` | `boolean` | `false` | Determines if the native should be shown alongside `tetikus` component. Useful for accessability purposes.
-`throttleSpeed` | `number` (integer) | 1 | Number of `mousemove` event that should be fired per 1000 milliseconds. The higher the number, the choppier the cursor movement will be.
+Prop Name | Type | Default | Description
+--------- | ---- | ------- | -----------
+`showDefaultCursor` | `boolean` | `false` | Determines if the native cursor should be shown alongside `tetikus` component. Useful for accessability purposes.
+`throttleSpeed` | `number` (integer) | 1 | Number of `mousemove` event that should be fired per 1000 milliseconds. The higher the number, the choppier the cursor movement will be. Useful to boost performance.
 `borderWidth` | `number` (px) | 2 | Border width of default cursor shape in pixels.
 `color` | `string` | `transparent` | Background color of default cursor shape. Accept any CSS color value.
 `borderColor` | `string` | `#121212` | Border color of default cursor shape. Accept any CSS color value.
@@ -84,7 +104,7 @@ Prop Name | Type |Default| Description
 
 Name | Description
 ---- | -----------
-(default slot) | Determines the cursor shape to be used. ⚠️ __Currently, using this slot will render any previously defined behaviors invalid. Any transition MUST be handled by yours truly__ ⚠️
+(default slot) | Determines the cursor shape to be used. The default shape is a perfect circle ⚠️ __Currently, using this slot will render any previously defined behaviors invalid. Any transition MUST be handled by yours truly__ ⚠️
 `contents` | Content to be displayed with the cursor
 
 ## Events
