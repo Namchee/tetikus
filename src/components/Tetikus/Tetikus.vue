@@ -339,8 +339,18 @@ export default defineComponent({
       }
 
       if (!isCustomShape()) {
-        const baseTarget = hoverState.value ?
-          hoverState.value.transformProps :
+        const { id } = getWrapperElement();
+        const { value } = hoverState;
+        const shouldTransform = value &&
+          (
+            !value.transformProps.id ||
+            value.transformProps.id === id ||
+            value.transformProps.id.includes(id)
+          );
+
+
+        const baseTarget = value && shouldTransform ?
+          value.transformProps :
           defaultTransformStyle.value;
 
         const transformTarget = {
@@ -362,10 +372,17 @@ export default defineComponent({
         return;
       }
 
-      if (!isCustomShape()) {
+      const { id } = getWrapperElement();
+      const { transformProps } = behavior;
+      const shouldTransform = !transformProps.id ||
+        transformProps.id === id ||
+        transformProps.id.includes(id);
+
+
+      if (!isCustomShape() && shouldTransform) {
         const transformTarget = {
           ...defaultTransformStyle.value,
-          ...behavior.transformProps,
+          ...transformProps,
         };
 
         applyTransform(defaultTransformStyle.value, transformTarget, false);
@@ -376,7 +393,16 @@ export default defineComponent({
 
     // handle cursor props when the cursor exits Tetikus-hoverable elements
     const handleElementOut = (prevBehavior: HoverBehavior): void => {
-      if (!isCustomShape() && !clickState.value) {
+      const { id } = getWrapperElement();
+      const { transformProps } = prevBehavior;
+      const shouldTransform = !transformProps.id ||
+        transformProps.id === id ||
+        transformProps.id.includes(id);
+
+      if (!isCustomShape() &&
+        !clickState.value &&
+        shouldTransform
+      ) {
         applyTransform(
           prevBehavior.transformProps,
           defaultTransformStyle.value,
