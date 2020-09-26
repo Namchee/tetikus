@@ -5,13 +5,13 @@ import {
   defaultEasingFunction,
   defaultDelay,
 } from './components/Tetikus/options';
-import { TetikusOptions } from './common/types';
+import { ConstructorOptions } from './common/types';
 import { App } from 'vue';
 
 export default {
   install(
     app: App,
-    { directiveName, transitionSpeed, easing, delay }: TetikusOptions = {},
+    { directiveName, transitionSpeed, easing, delay }: ConstructorOptions = {},
   ) {
     app.component('Tetikus', Tetikus);
     app.directive(directiveName || 'thover', TetikusHover);
