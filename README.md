@@ -8,12 +8,6 @@ Tetikus is a custom cursor component made for Vue 3 🖱️.
 
 > ⚠️ **WARNING**: This library **DOES NOT** work on older browsers that doesn't support `esnext`, the reason is stated [here](https://github.com/vuejs/vue-next)
 
-## Languages
-
-This documentation is also available on:
-
-- [🇮🇩 - Indonesian](./README-ID.md)
-
 ## Table of Contents
 
 - [Features](#Features)
