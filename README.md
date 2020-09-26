@@ -149,6 +149,7 @@ Name | Property | Type | Description
 &nbsp; | `borderWidth` (optional) | `TransformOpts<number>`, `number` | Determines the border width of cursor to be applied on transition.
 &nbsp; | `borderColor` (optional) | `TransformOpts<string>`, `string` | Determines the border color of cursor to be applied on transition. Accepts any CSS color string.
 &nbsp; | `opacity` (optional) | `TransformOpts<number>`, `number` (between 0.0 - 1.0) | Determines the opacity of cursor to be applied on transition.
+&nbsp; | `id` (optional) | `string`, `string[]` | Specify instances which should transform on hover event. Useful when you have multiple `tetikus` instances. Won't work at all on click events, you must register different behaviors directly into the instances.
 `HoverBehavior` | `domElement` | `HTMLElement` | The HTML element that triggers `tetikus-element-in` and `tetikus-element-out` events.
 &nbsp; | `transformProps` | `TransformProps` | Transformation to be applied on the cursor element.
 

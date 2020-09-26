@@ -18,6 +18,7 @@ export interface TransformOpts<T> {
 }
 
 export interface TransformProps {
+  id?: string | string[];
   scale?: TransformOpts<number> | number;
   color?: TransformOpts<string> | string;
   borderWidth?: TransformOpts<number> | number;
