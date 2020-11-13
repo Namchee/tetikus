@@ -1,6 +1,6 @@
 {
   "name": "@namchee/tetikus",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A custom cursor component for Vue 3 ✌️",
   "author": "Cristopher Namchee <cristophernamchee12@gmail.com>",
   "scripts": {
