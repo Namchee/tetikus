@@ -14,7 +14,11 @@ import { throttle } from './../../util/throttle';
 import { lerp } from './../../util/math';
 import { generateCSSTransform } from './../../util/dom';
 import { hoverState } from './../../directives/hover';
-import { TransformProps, HoverBehavior } from './../../common/types';
+import {
+  TransformProps,
+  HoverBehavior,
+  TetikusProps,
+} from './../../common/types';
 import {
   defaultTransitionSpeed,
   defaultEasingFunction,
@@ -79,8 +83,10 @@ export default defineComponent({
     buttonMap: {
       type: Array,
       default: () => ['left'],
-      validator: (val: Array<string>) => {
-        return val.every((v) => ['left', 'middle', 'right'].includes(v));
+      validator: (values: string[]) => {
+        return values.every(
+          (value: string) => ['left', 'middle', 'right'].includes(value),
+        );
       },
     },
 
@@ -145,9 +151,20 @@ export default defineComponent({
       type: Number,
       default: defaultDelay.value,
     },
+
+    // Unified tetikus props
+    // Useful to avoid apropcalypse
+    options: {
+      type: Object as () => TetikusProps,
+      default: {},
+    },
   },
 
-  setup(props, { slots, emit }) {
+  setup(properties, { slots, emit }) {
+    // construct new props unified object from options
+    // any undefined values will fallback normally.
+    const props = { ...properties, ...properties.options };
+
     // wrapper element ref
     const wrapper: Ref<HTMLElement | null> = ref(null);
     // cursor element ref
@@ -164,7 +181,7 @@ export default defineComponent({
 
     // css styles for cursor wrapper element
     const wrapperStyle = computed(() => {
-      const baseStyles: Record<string, unknown> = {
+      const baseStyles: Record<string, string | number> = {
         'opacity': props.opacity,
         'mix-blend-mode': props.invertColor ? 'difference' : 'normal',
         'flex-direction': props.contentPosition === 'bottom' ?
@@ -199,7 +216,8 @@ export default defineComponent({
     const contentStyle = computed(() => {
       return {
         'position': props.contentPosition === 'center' ?
-          'absolute' : 'center',
+          'absolute' :
+          'center',
       };
     });
 
@@ -309,7 +327,9 @@ export default defineComponent({
 
     // apply transformation on mouse button press
     const handleMouseDown = (event: MouseEvent): void => {
-      if (!props.buttonMap.includes(buttonMap.get(event.button))) {
+      const button = buttonMap.get(event.button) as string;
+
+      if (!props.buttonMap.includes(button)) {
         return;
       }
 
@@ -334,7 +354,9 @@ export default defineComponent({
 
     // apply another transform on cursor when mouse button is lifted
     const handleMouseUp = (event: MouseEvent): void => {
-      if (!props.buttonMap.includes(buttonMap.get(event.button))) {
+      const button = buttonMap.get(event.button) as string;
+
+      if (!props.buttonMap.includes(button)) {
         return;
       }
 
@@ -384,6 +406,8 @@ export default defineComponent({
           ...defaultTransformStyle.value,
           ...transformProps,
         };
+        // prevent TetikusWarning error
+        delete transformTarget.id;
 
         applyTransform(defaultTransformStyle.value, transformTarget, false);
       }
