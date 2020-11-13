@@ -93,6 +93,7 @@ Prop Name | Type | Default | Description
 `hideOnOut` | `boolean` | `false` | Determines if the custom cursor should be hidden when the cursor leaves the viewport
 `contentPosition` | `string` | `center` | Determines the position of `contents` slot relative to the cursor. Possible values are `center`, `bottom`, `right`
 `lerp` | `number` | `1` | [Linear Interpolation Value](https://codepen.io/ma77os/pen/KGIEh)
+`options` | `Object` | `{}` | All of other options in one single object. Will gracefully fallback if some values are not provided.
 
 ## Slots
 
